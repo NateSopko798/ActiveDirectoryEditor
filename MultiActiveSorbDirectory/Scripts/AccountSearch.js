@@ -22,13 +22,14 @@ $('#userTable tbody').on('click', 'tr', function () {
     var table = $(this).closest("table");
     var currentRow = $(this);
     alias = $(this).find("td:nth(3)").text();
+    $(".form-content").html("Please choose an action below for " + $(this).find("td:first").text() + "'s user account");
     if ($(this).find("td:nth(22)").text() == "Account Disabled") {
         var modal = bootbox.dialog({
             message: $(".form-content").html(),
-            title: "Edit or Enable User",
+            title: "User Control Panel",
             buttons: [
               {
-                  label: "Save Changes",
+                  label: "Edit User",
                   className: "btn btn-primary pull-left",
                   callback: function () {
                       //call user save changes post
@@ -85,6 +86,28 @@ $('#userTable tbody').on('click', 'tr', function () {
                   }
               },
               {
+                  label: "Unlock Account",
+                  className: "btn btn-primary pull-left",
+                  callback: function () {
+                      $.ajax({
+                          url: "Home/unlockAccountFromName",
+                          type: "POST",
+                          data: {
+                              sAMAccountName: alias
+                          },
+                          dataType: 'json',
+                          success: function (response) {
+                              if (response.success == true) {
+                                  alert("Account Unlocked")
+                              }
+                              else {
+                                  alert("Unlock didn't work, sorry.");
+                              }
+                          }
+                      })
+                  }
+              },
+              {
                   label: "Close",
                   className: "btn btn-default pull-right",
               },
@@ -99,10 +122,10 @@ $('#userTable tbody').on('click', 'tr', function () {
     else {
         var modal = bootbox.dialog({
             message: $(".form-content").html(),
-            title: "Edit or Disable User",
+            title: "User Control Panel",
             buttons: [
               {
-                  label: "Save Changes",
+                  label: "Edit User",
                   className: "btn btn-primary pull-left",
                   callback: function () {
                       //call user save changes post
@@ -150,6 +173,28 @@ $('#userTable tbody').on('click', 'tr', function () {
                               }
                               else {
                                   alert("Reset didn't work, sorry.");
+                              }
+                          }
+                      })
+                  }
+              },
+              {
+                  label: "Unlock Account",
+                  className: "btn btn-primary pull-left",
+                  callback: function () {
+                      $.ajax({
+                          url: "Home/unlockAccountFromName",
+                          type: "POST",
+                          data: {
+                              sAMAccountName: alias
+                          },
+                          dataType: 'json',
+                          success: function (response) {
+                              if (response.success == true) {
+                                  alert("Account Unlocked")
+                              }
+                              else {
+                                  alert("Unlock didn't work, sorry.");
                               }
                           }
                       })

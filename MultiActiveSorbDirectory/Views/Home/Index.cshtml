@@ -2,9 +2,6 @@
 @{
     ViewBag.Title = "Home Page";
 }
-@*<div class="jumbotron text-center">
-    <h1>Active Directory Tool</h1>
-</div>*@
 <br />
 
 <div class="row">
@@ -42,6 +39,7 @@
                     <th style="display:none;">Street Address</th>
                     <th style="display:none;">Telephone Number</th>
                     <th style="display:none;">Account Enabled</th>
+                    <th style="display:none;">Supervisor</th>
                 </tr>
             </thead>
             <tbody>
@@ -83,6 +81,7 @@
                         else{
                             <td style="display:none;">Account Enabled</td>
                         }
+                        <td style="display:none;">@account.manager</td>
                     </tr>
                 }
             </tbody>
@@ -91,98 +90,6 @@
     </div>
 
 <div class="form-content" style="display:none;">
-    <form class="form" role="form">
-        <div class="form-group">
-            <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" value="test@mail.ru"></input>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-        </div>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox"> Check me out
-            </label>
-        </div>
-        <div class="form-group">
-            <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" value="test@mail.ru"></input>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-        </div>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox"> Check me out
-            </label>
-        </div>
-        <div class="form-group">
-            <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" value="test@mail.ru"></input>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-        </div>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox"> Check me out
-            </label>
-        </div>
-        <div class="form-group">
-            <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" value="test@mail.ru"></input>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-        </div>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox"> Check me out
-            </label>
-        </div>
-        <div class="form-group">
-            <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" value="test@mail.ru"></input>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-        </div>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox"> Check me out
-            </label>
-        </div>
-        <div class="form-group">
-            <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" value="test@mail.ru"></input>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-        </div>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox"> Check me out
-            </label>
-        </div>
-        <div class="form-group">
-            <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" value="test@mail.ru"></input>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-        </div>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox"> Check me out
-            </label>
-        </div>
-    </form>
+    <p id="dynamicNameMessage" style="text-align:center;"></p>
 </div>
 @Scripts.Render("~/Scripts/AccountSearch.js")

@@ -13,6 +13,10 @@ tr.highlight { background-color: grey ! important;}
 
 btn.grey {color: grey ! important;}
 
+.dialogWide > .modal-dialog {
+     width: 80% !important;
+ }
+
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
 */

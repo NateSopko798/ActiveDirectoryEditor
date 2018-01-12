@@ -13,7 +13,7 @@ namespace MultiActiveSorbDirectory.Controllers
         //List<String> propList = new List<string>();
         //List<String> valList = new List<string>();
         //List<String> userList = new List<string>();
-        List<String> names = new List<string>();
+        //List<String> names = new List<string>();
 
         static DirectoryEntry createDirectoryEntry()
         {
@@ -449,9 +449,37 @@ namespace MultiActiveSorbDirectory.Controllers
                 {
                     DirectoryEntry entryToUpdate = result.GetDirectoryEntry();
                     entryToUpdate.Invoke("SetPassword", new object[] {"Mti@325"});
-                    //entryToUpdate.Properties["LockOutTime"].Value = 0; // unlock account
+                    entryToUpdate.Properties["LockOutTime"].Value = 0; // unlock account
                     entryToUpdate.Properties["pwdLastSet"].Value = 0;
                     //entryToUpdate.Properties["PasswordExpired"].Value = 1;
+                    entryToUpdate.CommitChanges();
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+
+                else return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+            }
+
+            catch (Exception e)
+            {
+                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult unlockAccountFromName(String sAMAccountName)
+        {
+            try
+            {
+                DirectoryEntry myLdapConnection = createDirectoryEntry();
+
+                DirectorySearcher search = new DirectorySearcher(myLdapConnection);
+                search.Filter = "(sAMAccountName=" + sAMAccountName + ")";
+                SearchResult result = search.FindOne();
+
+                if (result != null)
+                {
+                    DirectoryEntry entryToUpdate = result.GetDirectoryEntry();
+                    entryToUpdate.Properties["LockOutTime"].Value = 0; // unlock account
                     entryToUpdate.CommitChanges();
                     return Json(new { success = true }, JsonRequestBehavior.AllowGet);
                 }
