@@ -13,6 +13,7 @@ namespace MultiActiveSorbDirectory.Controllers
         //List<String> propList = new List<string>();
         //List<String> valList = new List<string>();
         //List<String> userList = new List<string>();
+        List<String> names = new List<string>();
 
         static DirectoryEntry createDirectoryEntry()
         {
@@ -20,7 +21,7 @@ namespace MultiActiveSorbDirectory.Controllers
             return directoryEntry;
         }
 
-        public ActionResult searchByUserName(String user, DirectoryEntry de)
+        private ActionResult searchByUserName(String user, DirectoryEntry de)
         {
             DirectorySearcher searcher = new DirectorySearcher(de)
             {
@@ -35,35 +36,77 @@ namespace MultiActiveSorbDirectory.Controllers
                 Console.Write("result was null");
             }
 
+            ActiveDirectoryAccount viewModel = new ActiveDirectoryAccount();
+            List<Account> allUsersView = new List<Account>();
+
             try
             {
-                foreach (string propName in result.Properties.PropertyNames)
-                {
-                    ResultPropertyValueCollection valueCollection =
-                    result.Properties[propName];
-                    foreach (Object propertyValue in valueCollection)
-                    {
+                //foreach (string propName in result.Properties.PropertyNames)
+                //{
+                //    ResultPropertyValueCollection valueCollection =
+                //    result.Properties[propName];
+                //    foreach (Object propertyValue in valueCollection)
+                //    {
 
-                        //propList.Add(propName);
-                        //valList.Add(propertyValue.ToString());
-                    }
+                //        //propList.Add(propName);
+                //        //valList.Add(propertyValue.ToString());
+                //    }
+                //}
+
+                string displayName = "";
+
+                if (result.Properties.Contains("displayName"))
+                {
+                    displayName = result.Properties["displayName"][0].ToString();
+                    //ViewBag.lastname = surname;
                 }
 
-                string surname;
+                string surname = "";
 
                 if (result.Properties.Contains("sn"))
                 {
                     surname = result.Properties["sn"][0].ToString();
-                    ViewBag.lastname = surname;
+                    //ViewBag.lastname = surname;
                 }
 
-                string firstname;
+                string firstname = "";
 
                 if (result.Properties.Contains("givenName"))
                 {
                     firstname = result.Properties["givenName"][0].ToString();
-                    ViewBag.firstname = firstname;
+                    //ViewBag.firstname = firstname;
                 }
+                string Alias = "";
+
+                if (result.Properties.Contains("sAMAccountName"))
+                {
+                    Alias = result.Properties["sAMAccountName"][0].ToString();
+                    //ViewBag.lastname = surname;
+                }
+
+                string JobTitle = "";
+
+                if (result.Properties.Contains("title"))
+                {
+                    JobTitle = result.Properties["title"][0].ToString();
+                    //ViewBag.firstname = firstname;
+                }
+                string Department ="";
+
+                if (result.Properties.Contains("department"))
+                {
+                    surname = result.Properties["department"][0].ToString();
+                    //ViewBag.lastname = surname;
+                }
+                
+                Account m = new Account();
+                m.displayName = displayName;
+                m.givenName = firstname;
+                m.SN = surname;
+                m.sAMAccountName = Alias;
+                m.title = JobTitle;
+                m.department = Department;
+                allUsersView.Add(m);
             }
 
             catch (Exception e)
@@ -73,10 +116,11 @@ namespace MultiActiveSorbDirectory.Controllers
 
             //ViewBag.propList = propList;
             //ViewBag.valList = valList;
-            return View();
+            viewModel.Accounts = allUsersView;
+            return View(viewModel);
         }
 
-        public Account buildUser(SearchResult user)
+        private Account buildUser(SearchResult user)
         {
             Account m = new Account();
             try
@@ -340,7 +384,7 @@ namespace MultiActiveSorbDirectory.Controllers
             return m;
         }
 
-        public ActionResult searchAllUsers(DirectoryEntry de)
+        private ActionResult searchAllUsers(DirectoryEntry de)
         {
             ActiveDirectoryAccount viewModel = new ActiveDirectoryAccount();
             List<Account> allUsersView = new List<Account>();
@@ -359,10 +403,122 @@ namespace MultiActiveSorbDirectory.Controllers
             return View(viewModel);
         }
 
+        private ActionResult testSetup()
+        {
+            ActiveDirectoryAccount viewModel = new ActiveDirectoryAccount();
+            List<Account> allUsersView = new List<Account>();
+            Account m = new Account();
+            m.displayName = "Mountain, Lorie";
+            m.givenName = "Lorie";
+            m.SN = "Mountain";
+            m.sAMAccountName = "lam";
+            m.title = "Senior IS Support Technician";
+            m.department = "Information Technology";
+            allUsersView.Add(m);
+            Account m1 = new Account();
+            m1.displayName = "Fronczak, Greg";
+            m1.givenName = "Greg";
+            m1.SN = "Fronczak";
+            m1.sAMAccountName = "gcf";
+            m1.title = "Materials Group Manager";
+            m1.department = "Materials";
+            allUsersView.Add(m1);
+            viewModel.Accounts = allUsersView;
+            return View(viewModel);
+        }
+
         public ActionResult Index()
         {
             return searchAllUsers(createDirectoryEntry());
-            //return searchByUserName("nsopko",createDirectoryEntry());
+            //return searchByUserName("newSPC",createDirectoryEntry());
+            //return testSetup();
+        }
+
+        [HttpPost]
+        public JsonResult resetPasswordFromName(String sAMAccountName)
+        {
+            try
+            {
+                DirectoryEntry myLdapConnection = createDirectoryEntry();
+
+                DirectorySearcher search = new DirectorySearcher(myLdapConnection);
+                search.Filter = "(sAMAccountName=" + sAMAccountName + ")";
+                SearchResult result = search.FindOne();
+
+                if (result != null)
+                {
+                    DirectoryEntry entryToUpdate = result.GetDirectoryEntry();
+                    entryToUpdate.Invoke("SetPassword", new object[] {"Mti@325"});
+                    //entryToUpdate.Properties["LockOutTime"].Value = 0; // unlock account
+                    entryToUpdate.Properties["pwdLastSet"].Value = 0;
+                    //entryToUpdate.Properties["PasswordExpired"].Value = 1;
+                    entryToUpdate.CommitChanges();
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+
+                else return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+            }
+
+            catch (Exception e)
+            {
+                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult disableUserFromName(String sAMAccountName)
+        {
+            try
+            {
+                DirectoryEntry myLdapConnection = createDirectoryEntry();
+
+                DirectorySearcher search = new DirectorySearcher(myLdapConnection);
+                search.Filter = "(sAMAccountName=" + sAMAccountName + ")";
+                SearchResult result = search.FindOne();
+
+                if (result != null)
+                {
+                    DirectoryEntry entryToUpdate = result.GetDirectoryEntry();
+                    entryToUpdate.Invoke("Put", new object[] { "userAccountControl", "514" }); 
+                    entryToUpdate.CommitChanges();
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+
+                else return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+            }
+
+            catch (Exception e)
+            {
+                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult enableUserFromName(String sAMAccountName)
+        {
+            try
+            {
+                DirectoryEntry myLdapConnection = createDirectoryEntry();
+
+                DirectorySearcher search = new DirectorySearcher(myLdapConnection);
+                search.Filter = "(sAMAccountName=" + sAMAccountName + ")";
+                SearchResult result = search.FindOne();
+
+                if (result != null)
+                {
+                    DirectoryEntry entryToUpdate = result.GetDirectoryEntry();
+                    entryToUpdate.Invoke("Put", new object[] { "userAccountControl", "512" });
+                    entryToUpdate.CommitChanges();
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+
+                else return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+            }
+
+            catch (Exception e)
+            {
+                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult About()
