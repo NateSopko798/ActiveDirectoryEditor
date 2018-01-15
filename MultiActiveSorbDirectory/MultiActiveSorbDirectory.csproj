@@ -241,6 +241,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\CreateUser.js" />
+    <Content Include="Scripts\EditUser.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -314,11 +316,11 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\EditUser\Index.cshtml" />
+    <Content Include="Views\CreateUser\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Properties\" />
-    <Folder Include="Views\CreateUser\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -30,10 +30,18 @@ namespace MultiActiveSorbDirectory.Models
         public string ObjectClass { get; set; } //Usually, User, or Computer
         public string pwdLastSet { get; set; } //Force users to change their passwords at next logon
         public string postalCode { get; set; } //Zip or post code
+        public string physicalDeliveryOfficeName { get; set; }
         public string st { get; set; } //State, Province or County
+        public string employeeID { get; set; } //for printing - user attribute
         public string streetAddress { get; set; } //First line of address
         public string telephoneNumber { get; set; } //Office Phone
         public string userAccountControl { get; set; } //Enable (512) / disable account (514)
+    }
+
+    public class Person
+    {
+        public string displayName { get; set; }
+        public string sAMAccountName { get; set; }
     }
 
     public class ActiveDirectoryAccount

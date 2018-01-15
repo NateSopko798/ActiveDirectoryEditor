@@ -1,13 +1,16 @@
-﻿@model MultiActiveSorbDirectory.Models.ActiveDirectoryAccount
+﻿@model MultiActiveSorbDirectory.Models.Account
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Edit User Account";
 }
 <div class="row">
     <div class="col-lg-12" style ="text-align:center;">
         <h2>Edit User Account</h2>
     </div><!-- /.col-lg-12 -->
 </div>
-
+<br />
+@using (Html.BeginForm())
+{
+@Html.EditorForModel()
 <form>
     <div class="form-row">
         <div class="form-group col-md-5">
@@ -23,7 +26,7 @@
             <input type="text" class="form-control" id="lastName" placeholder="Last Name">
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group col-md-12">
         <label for="address">Address</label>
         <input type="text" class="form-control" id="address" placeholder="Street Address">
     </div>
@@ -96,7 +99,7 @@
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
-            <label for="country">State</label>
+            <label for="country">Country</label>
             <select id="country" class="form-control">
                 <option selected value="US">United States</option>
                 <option value="AF">Afghanistan</option>
@@ -358,6 +361,54 @@
             <input type="text" class="form-control" id="officeExtension">
         </div>
     </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="title">Job Title</label>
+            <input type="text" class="form-control" id="title">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="department">Department</label>
+            <select id="department" class="form-control">
+                <option selected>Choose...</option>
+                <option value="Accounting">Accounting</option>
+                <option value="Engineering">Engineering</option>
+                <option value="HR">Human Resources</option>
+                <option value="IT">Information Technology</option>
+                <option value="Production">Production</option>
+                <option value="RD">Research and Development</option>
+                <option value="QA">Quality</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <label for="employeeId">Employee ID</label>
+            <input type="text" class="form-control" id="employeeId">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label for="alias">Alias</label>
+            <input type="text" class="form-control" id="alias">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="manager">Supervisor</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="manager" placeholder="Search for supervisor...">
+                <span class="input-group-btn">
+                    <button class="btn btn-secondary" type="button">Search</button>
+                </span>
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="email">Email Prefix</label>
+            <input type="text" class="form-control" id="email">
+        </div>
+        <div class="form-group col-md-2">
+            <label for="telephone">Direct Telephone</label>
+            <input type="text" class="form-control" id="telephone">
+        </div>
+    </div>
+    <br />
     <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
+}
 @Scripts.Render("~/Scripts/AccountSearch.js")

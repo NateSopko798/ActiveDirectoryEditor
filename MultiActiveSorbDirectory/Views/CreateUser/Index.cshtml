@@ -1,0 +1,434 @@
+﻿@model MultiActiveSorbDirectory.Models.Account
+@{
+//ViewBag.Title = "Create User Account";
+}
+<div class="row">
+    <div class="col-lg-12" style ="text-align:center;">
+        <h2>Create User Account</h2>
+    <p>**All fields are mandatory**</p>
+    </div><!-- /.col-lg-12 -->
+</div>
+<br />
+@using (Html.BeginForm())
+{
+<form id="createUserForm">
+    <div class="form-row">
+        <div id ="firstNameDiv" class="form-group col-md-5">
+            <label for="firstName">First Name</label>
+            @*<input type="text" class="form-control" id="firstName" placeholder="First Name">*@
+            @Html.TextBoxFor(model => model.givenName, new { @class = "form-control", @placeholder = "First Name", @id = "firstName" })
+        </div>
+        <div id="initialsDiv"class="form-group col-md-2">
+            <label for="initials">Middle Initial</label>
+            @*<input type="text" class="form-control" id="initials" placeholder="Middle Initial">*@
+            @Html.TextBoxFor(model => model.initials, new { @class = "form-control", @placeholder = "Middle Initial", @id = "initials" })
+        </div>
+        <div id="lastNameDiv"class="form-group col-md-5">
+            <label for="lastName">Last Name</label>
+            @*<input type="text" class="form-control" id="lastName" placeholder="Last Name">*@
+            @Html.TextBoxFor(model => model.SN, new { @class = "form-control", @placeholder = "Last Name", @id = "lastName" })
+        </div>
+    </div>
+    <div id="addressDiv"class="form-group col-md-12">
+        <label for="address">Address</label>
+        @*<input type="text" class="form-control" id="address" placeholder="Street Address">*@
+        @Html.TextBoxFor(model => model.streetAddress, new { @class = "form-control", @Value="325 Harlem Rd.", @id = "address" })
+    </div>
+    <div class="form-row">
+        <div id="cityDiv"class="form-group col-md-6">
+            <label for="city">City</label>
+            @*<input type="text" class="form-control" id="city">*@
+            @Html.TextBoxFor(model => model.l, new { @class = "form-control", @Value="West Seneca", @id = "city" })
+        </div>
+        <div class="form-group col-md-4">
+            <label for="state">State</label>
+            @{
+                List<SelectListItem> states = new List<SelectListItem>();
+                states.Add(new SelectListItem { Text = "Alabama", Value = "Alabama" });
+                states.Add(new SelectListItem { Text = "Alaska", Value = "Alaska" });
+                states.Add(new SelectListItem { Text = "Arizona", Value = "Arizona" });
+                states.Add(new SelectListItem { Text = "Arkansas", Value = "Arkansas" });
+                states.Add(new SelectListItem { Text = "California", Value = "California" });
+                states.Add(new SelectListItem { Text = "Colorado", Value = "Colorado" });
+                states.Add(new SelectListItem { Text = "Connecticut", Value = "Connecticut" });
+                states.Add(new SelectListItem { Text = "Delaware", Value = "Delaware" });
+                states.Add(new SelectListItem { Text = "District Of Columbia", Value = "District Of Columbia" });
+                states.Add(new SelectListItem { Text = "Florida", Value = "Florida" });
+                states.Add(new SelectListItem { Text = "Georgia", Value = "Georgia" });
+                states.Add(new SelectListItem { Text = "Hawaii", Value = "Hawaii" });
+                states.Add(new SelectListItem { Text = "Idaho", Value = "Idaho" });
+                states.Add(new SelectListItem { Text = "Illinois", Value = "Illinois" });
+                states.Add(new SelectListItem { Text = "Indiana", Value = "Indiana" });
+                states.Add(new SelectListItem { Text = "Iowa", Value = "Iowa" });
+                states.Add(new SelectListItem { Text = "Kansas", Value = "Kansas" });
+                states.Add(new SelectListItem { Text = "Kentucky", Value = "Kentucky" });
+                states.Add(new SelectListItem { Text = "Louisiana", Value = "Louisiana" });
+                states.Add(new SelectListItem { Text = "Maine", Value = "Maine" });
+                states.Add(new SelectListItem { Text = "Maryland", Value = "Maryland" });
+                states.Add(new SelectListItem { Text = "Massachusetts", Value = "Massachusetts" });
+                states.Add(new SelectListItem { Text = "Michigan", Value = "Michigan" });
+                states.Add(new SelectListItem { Text = "Minnesota", Value = "Minnesota" });
+                states.Add(new SelectListItem { Text = "Mississippi", Value = "Mississippi" });
+                states.Add(new SelectListItem { Text = "Missouri", Value = "Missouri" });
+                states.Add(new SelectListItem { Text = "Montana", Value = "Montana" });
+                states.Add(new SelectListItem { Text = "Nebraska", Value = "Nebraska" });
+                states.Add(new SelectListItem { Text = "Nevada", Value = "Nevada" });
+                states.Add(new SelectListItem { Text = "New Hampshire", Value = "New Hampshire" });
+                states.Add(new SelectListItem { Text = "New Jersey", Value = "New Jersey" });
+                states.Add(new SelectListItem { Text = "New Mexico", Value = "New Mexico" });
+                states.Add(new SelectListItem { Text = "New York", Value = "New York", Selected=true});
+                states.Add(new SelectListItem { Text = "North Carolina", Value = "North Carolina" });
+                states.Add(new SelectListItem { Text = "North Dakota", Value = "North Dakota" });
+                states.Add(new SelectListItem { Text = "Ohio", Value = "Ohio" });
+                states.Add(new SelectListItem { Text = "Oklahoma", Value = "Oklahoma" });
+                states.Add(new SelectListItem { Text = "Oregon", Value = "Oregon" });
+                states.Add(new SelectListItem { Text = "Pennsylvania", Value = "Pennsylvania" });
+                states.Add(new SelectListItem { Text = "Rhode Island", Value = "Rhode Island" });
+                states.Add(new SelectListItem { Text = "South Carolina", Value = "South Carolina" });
+                states.Add(new SelectListItem { Text = "South Dakota", Value = "South Dakota" });
+                states.Add(new SelectListItem { Text = "Tennessee", Value = "Tennessee" });
+                states.Add(new SelectListItem { Text = "Texas", Value = "Texas" });
+                states.Add(new SelectListItem { Text = "Utah", Value = "Utah" });
+                states.Add(new SelectListItem { Text = "Vermont", Value = "Vermont" });
+                states.Add(new SelectListItem { Text = "Virginia", Value = "Virginia" });
+                states.Add(new SelectListItem { Text = "Washington", Value = "Washington" });
+                states.Add(new SelectListItem { Text = "West Virginia", Value = "West Virginia" });
+                states.Add(new SelectListItem { Text = "Wisconsin", Value = "Wisconsin" });
+                states.Add(new SelectListItem { Text = "Wyoming", Value = "Wyoming" });
+            }
+            @Html.DropDownListFor(model => model.st, states, new {@class = "form-control"})
+        </div>
+        <div id="zipCodeDiv"class="form-group col-md-2">
+            <label for="zipCode">Zip Code</label>
+            @*<input type="text" class="form-control" id="zipCode">*@
+            @Html.TextBoxFor(model => model.postalCode, new { @class = "form-control", @Value="14224", @id = "zipCode" })
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="country">Country</label>
+            @{
+                List<SelectListItem> countries = new List<SelectListItem>();
+                countries.Add(new SelectListItem { Text = "United States", Value = "United States",Selected=true });
+                countries.Add(new SelectListItem { Text = "India", Value = "India" });
+                countries.Add(new SelectListItem { Text = "Åland Islands", Value = "Åland Islands" });
+                countries.Add(new SelectListItem { Text = "Albania", Value = "Albania" });
+                countries.Add(new SelectListItem { Text = "Algeria", Value = "Algeria" });
+                countries.Add(new SelectListItem { Text = "American Samoa", Value = "American Samoa" });
+                countries.Add(new SelectListItem { Text = "Andorra", Value = "Andorra" });
+                countries.Add(new SelectListItem { Text = "Angola", Value = "Angola" });
+                countries.Add(new SelectListItem { Text = "Anguilla", Value = "Anguilla" });
+                countries.Add(new SelectListItem { Text = "Antarctica", Value = "Antarctica" });
+                countries.Add(new SelectListItem { Text = "Antigua and Barbuda", Value = "Antigua and Barbuda" });
+                countries.Add(new SelectListItem { Text = "Argentina", Value = "Argentina" });
+                countries.Add(new SelectListItem { Text = "Armenia", Value = "Armenia" });
+                countries.Add(new SelectListItem { Text = "Aruba", Value = "Aruba" });
+                countries.Add(new SelectListItem { Text = "Australia", Value = "Australia" });
+                countries.Add(new SelectListItem { Text = "Austria", Value = "Austria" });
+                countries.Add(new SelectListItem { Text = "Azerbaijan", Value = "Azerbaijan" });
+                countries.Add(new SelectListItem { Text = "Bahamas", Value = "Bahamas" });
+                countries.Add(new SelectListItem { Text = "Bahrain", Value = "Bahrain" });
+                countries.Add(new SelectListItem { Text = "Bangladesh", Value = "Bangladesh" });
+                countries.Add(new SelectListItem { Text = "Barbados", Value = "Barbados" });
+                countries.Add(new SelectListItem { Text = "Belarus", Value = "Belarus" });
+                countries.Add(new SelectListItem { Text = "Belgium", Value = "Belgium" });
+                countries.Add(new SelectListItem { Text = "Belize", Value = "Belize" });
+                countries.Add(new SelectListItem { Text = "Benin", Value = "Benin" });
+                countries.Add(new SelectListItem { Text = "Bermuda", Value = "Bermuda" });
+                countries.Add(new SelectListItem { Text = "Bhutan", Value = "Bhutan" });
+                countries.Add(new SelectListItem { Text = "Bolivia, Plurinational State of", Value = "Bolivia, Plurinational State of" });
+                countries.Add(new SelectListItem { Text = "Bonaire, Sint Eustatius and Saba", Value = "Bonaire, Sint Eustatius and Saba" });
+                countries.Add(new SelectListItem { Text = "Bosnia and Herzegovina", Value = "Bosnia and Herzegovina" });
+                countries.Add(new SelectListItem { Text = "Botswana", Value = "Botswana" });
+                countries.Add(new SelectListItem { Text = "Bouvet Island", Value = "Bouvet Island" });
+                countries.Add(new SelectListItem { Text = "Brazil", Value = "Brazil" });
+                countries.Add(new SelectListItem { Text = "British Indian Ocean Territory", Value = "British Indian Ocean Territory" });
+                countries.Add(new SelectListItem { Text = "Brunei Darussalam", Value = "Brunei Darussalam" });
+                countries.Add(new SelectListItem { Text = "Bulgaria", Value = "Bulgaria" });
+                countries.Add(new SelectListItem { Text = "Burkina Faso", Value = "Burkina Faso" });
+                countries.Add(new SelectListItem { Text = "Burundi", Value = "Burundi" });
+                countries.Add(new SelectListItem { Text = "Cambodia", Value = "Cambodia" });
+                countries.Add(new SelectListItem { Text = "Cameroon", Value = "Cameroon" });
+                countries.Add(new SelectListItem { Text = "Canada", Value = "Canada" });
+                countries.Add(new SelectListItem { Text = "Cape Verde", Value = "Cape Verde" });
+                countries.Add(new SelectListItem { Text = "Cayman Islands", Value = "Cayman Islands" });
+                countries.Add(new SelectListItem { Text = "Central African Republic", Value = "Central African Republic" });
+                countries.Add(new SelectListItem { Text = "Chad", Value = "Chad" });
+                countries.Add(new SelectListItem { Text = "Chile", Value = "Chile" });
+                countries.Add(new SelectListItem { Text = "China", Value = "China" });
+                countries.Add(new SelectListItem { Text = "Christmas Island", Value = "Christmas Island" });
+                countries.Add(new SelectListItem { Text = "Cocos (Keeling) Islands", Value = "Cocos (Keeling) Islands" });
+                countries.Add(new SelectListItem { Text = "Colombia", Value = "Colombia" });
+                countries.Add(new SelectListItem { Text = "Comoros", Value = "Comoros" });
+                countries.Add(new SelectListItem { Text = "Congo", Value = "Congo" });
+                countries.Add(new SelectListItem { Text = "Congo, the Democratic Republic of the", Value = "Congo, the Democratic Republic of the" });
+                countries.Add(new SelectListItem { Text = "Cook Islands", Value = "Cook Islands" });
+                countries.Add(new SelectListItem { Text = "Costa Rica", Value = "Costa Rica" });
+                countries.Add(new SelectListItem { Text = "Côte d'Ivoire", Value = "Côte d'Ivoire" });
+                countries.Add(new SelectListItem { Text = "Croatia", Value = "Croatia" });
+                countries.Add(new SelectListItem { Text = "Cuba", Value = "Cuba" });
+                countries.Add(new SelectListItem { Text = "Curaçao", Value = "Curaçao" });
+                countries.Add(new SelectListItem { Text = "Cyprus", Value = "Cyprus" });
+                countries.Add(new SelectListItem { Text = "Czech Republic", Value = "Czech Republic" });
+                countries.Add(new SelectListItem { Text = "Denmark", Value = "Denmark" });
+                countries.Add(new SelectListItem { Text = "Djibouti", Value = "Djibouti" });
+                countries.Add(new SelectListItem { Text = "Dominica", Value = "Dominica" });
+                countries.Add(new SelectListItem { Text = "Dominican Republic", Value = "Dominican Republic" });
+                countries.Add(new SelectListItem { Text = "Ecuador", Value = "Ecuador" });
+                countries.Add(new SelectListItem { Text = "Egypt", Value = "Egypt" });
+                countries.Add(new SelectListItem { Text = "El Salvador", Value = "El Salvador" });
+                countries.Add(new SelectListItem { Text = "Equatorial Guinea", Value = "Equatorial Guinea" });
+                countries.Add(new SelectListItem { Text = "Eritrea", Value = "Eritrea" });
+                countries.Add(new SelectListItem { Text = "Estonia", Value = "Estonia" });
+                countries.Add(new SelectListItem { Text = "Ethiopia", Value = "Ethiopia" });
+                countries.Add(new SelectListItem { Text = "Falkland Islands (Malvinas)", Value = "Falkland Islands (Malvinas)" });
+                countries.Add(new SelectListItem { Text = "Faroe Islands", Value = "Faroe Islands" });
+                countries.Add(new SelectListItem { Text = "Fiji", Value = "Fiji" });
+                countries.Add(new SelectListItem { Text = "Finland", Value = "Finland" });
+                countries.Add(new SelectListItem { Text = "France", Value = "France" });
+                countries.Add(new SelectListItem { Text = "French Guiana", Value = "French Guiana" });
+                countries.Add(new SelectListItem { Text = "French Polynesia", Value = "French Polynesia" });
+                countries.Add(new SelectListItem { Text = "French Southern Territories", Value = "French Southern Territories" });
+                countries.Add(new SelectListItem { Text = "Gabon", Value = "Gabon" });
+                countries.Add(new SelectListItem { Text = "Gambia", Value = "Gambia" });
+                countries.Add(new SelectListItem { Text = "Georgia", Value = "Georgia" });
+                countries.Add(new SelectListItem { Text = "Germany", Value = "Germany" });
+                countries.Add(new SelectListItem { Text = "Ghana", Value = "Ghana" });
+                countries.Add(new SelectListItem { Text = "Gibraltar", Value = "Gibraltar" });
+                countries.Add(new SelectListItem { Text = "Greece", Value = "Greece" });
+                countries.Add(new SelectListItem { Text = "Greenland", Value = "Greenland" });
+                countries.Add(new SelectListItem { Text = "Grenada", Value = "Grenada" });
+                countries.Add(new SelectListItem { Text = "Guadeloupe", Value = "Guadeloupe" });
+                countries.Add(new SelectListItem { Text = "Guam", Value = "Guam" });
+                countries.Add(new SelectListItem { Text = "Guatemala", Value = "Guatemala" });
+                countries.Add(new SelectListItem { Text = "Guernsey", Value = "Guernsey" });
+                countries.Add(new SelectListItem { Text = "Guinea", Value = "Guinea" });
+                countries.Add(new SelectListItem { Text = "Guinea-Bissau", Value = "Guinea-Bissau" });
+                countries.Add(new SelectListItem { Text = "Guyana", Value = "Guyana" });
+                countries.Add(new SelectListItem { Text = "Haiti", Value = "Haiti" });
+                countries.Add(new SelectListItem { Text = "Heard Island and McDonald Islands", Value = "Heard Island and McDonald Islands" });
+                countries.Add(new SelectListItem { Text = "Holy See (Vatican City State)", Value = "Holy See (Vatican City State)" });
+                countries.Add(new SelectListItem { Text = "Honduras", Value = "Honduras" });
+                countries.Add(new SelectListItem { Text = "Hong Kong", Value = "Hong Kong" });
+                countries.Add(new SelectListItem { Text = "Hungary", Value = "Hungary" });
+                countries.Add(new SelectListItem { Text = "Iceland", Value = "Iceland" });
+                countries.Add(new SelectListItem { Text = "India", Value = "India" });
+                countries.Add(new SelectListItem { Text = "Indonesia", Value = "Indonesia" });
+                countries.Add(new SelectListItem { Text = "Iran, Islamic Republic of", Value = "Iran, Islamic Republic of" });
+                countries.Add(new SelectListItem { Text = "Iraq", Value = "Iraq" });
+                countries.Add(new SelectListItem { Text = "Ireland", Value = "Ireland" });
+                countries.Add(new SelectListItem { Text = "Isle of Man", Value = "Isle of Man" });
+                countries.Add(new SelectListItem { Text = "Israel", Value = "Israel" });
+                countries.Add(new SelectListItem { Text = "Italy", Value = "Italy" });
+                countries.Add(new SelectListItem { Text = "Jamaica", Value = "Jamaica" });
+                countries.Add(new SelectListItem { Text = "Japan", Value = "Japan" });
+                countries.Add(new SelectListItem { Text = "Jersey", Value = "Jersey" });
+                countries.Add(new SelectListItem { Text = "Jordan", Value = "Jordan" });
+                countries.Add(new SelectListItem { Text = "Kazakhstan", Value = "Kazakhstan" });
+                countries.Add(new SelectListItem { Text = "Kenya", Value = "Kenya" });
+                countries.Add(new SelectListItem { Text = "Kiribati", Value = "Kiribati" });
+                countries.Add(new SelectListItem { Text = "Korea, Democratic People's Republic of", Value = "Korea, Democratic People's Republic of" });
+                countries.Add(new SelectListItem { Text = "Korea, Republic of", Value = "Korea, Republic of" });
+                countries.Add(new SelectListItem { Text = "Kuwait", Value = "Kuwait" });
+                countries.Add(new SelectListItem { Text = "Kyrgyzstan", Value = "Kyrgyzstan" });
+                countries.Add(new SelectListItem { Text = "Lao People's Democratic Republic", Value = "Lao People's Democratic Republic" });
+                countries.Add(new SelectListItem { Text = "Latvia", Value = "Latvia" });
+                countries.Add(new SelectListItem { Text = "Lebanon", Value = "Lebanon" });
+                countries.Add(new SelectListItem { Text = "Lesotho", Value = "Lesotho" });
+                countries.Add(new SelectListItem { Text = "Liberia", Value = "Liberia" });
+                countries.Add(new SelectListItem { Text = "Libya", Value = "Libya" });
+                countries.Add(new SelectListItem { Text = "Liechtenstein", Value = "Liechtenstein" });
+                countries.Add(new SelectListItem { Text = "Lithuania", Value = "Lithuania" });
+                countries.Add(new SelectListItem { Text = "Luxembourg", Value = "Luxembourg" });
+                countries.Add(new SelectListItem { Text = "Macao", Value = "Macao" });
+                countries.Add(new SelectListItem { Text = "Macedonia, the former Yugoslav Republic of", Value = "Macedonia, the former Yugoslav Republic of" });
+                countries.Add(new SelectListItem { Text = "Madagascar", Value = "Madagascar" });
+                countries.Add(new SelectListItem { Text = "Malawi", Value = "Malawi" });
+                countries.Add(new SelectListItem { Text = "Malawi", Value = "Malawi" });
+                countries.Add(new SelectListItem { Text = "Malaysia", Value = "Malaysia" });
+                countries.Add(new SelectListItem { Text = "Maldives", Value = "Maldives" });
+                countries.Add(new SelectListItem { Text = "Mali", Value = "Mali" });
+                countries.Add(new SelectListItem { Text = "Malta", Value = "Malta" });
+                countries.Add(new SelectListItem { Text = "Marshall Islands", Value = "Marshall Islands" });
+                countries.Add(new SelectListItem { Text = "Martinique", Value = "Martinique" });
+                countries.Add(new SelectListItem { Text = "Mauritania", Value = "Mauritania" });
+                countries.Add(new SelectListItem { Text = "Mauritius", Value = "Mauritius" });
+                countries.Add(new SelectListItem { Text = "Mayotte", Value = "Mayotte" });
+                countries.Add(new SelectListItem { Text = "Mexico", Value = "Mexico" });
+                countries.Add(new SelectListItem { Text = "Micronesia, Federated States of", Value = "Micronesia, Federated States of" });
+                countries.Add(new SelectListItem { Text = "Moldova, Republic of", Value = "Moldova, Republic of" });
+                countries.Add(new SelectListItem { Text = "Monaco", Value = "Monaco" });
+                countries.Add(new SelectListItem { Text = "Mongolia", Value = "Mongolia" });
+                countries.Add(new SelectListItem { Text = "Montenegro", Value = "Montenegro" });
+                countries.Add(new SelectListItem { Text = "Montserrat", Value = "Montserrat" });
+                countries.Add(new SelectListItem { Text = "Morocco", Value = "Morocco" });
+                countries.Add(new SelectListItem { Text = "Mozambique", Value = "Mozambique" });
+                countries.Add(new SelectListItem { Text = "Myanmar", Value = "Myanmar" });
+                countries.Add(new SelectListItem { Text = "Namibia", Value = "Namibia" });
+                countries.Add(new SelectListItem { Text = "Nauru", Value = "Nauru" });
+                countries.Add(new SelectListItem { Text = "Nepal", Value = "Nepal" });
+                countries.Add(new SelectListItem { Text = "Netherlands", Value = "Netherlands" });
+                countries.Add(new SelectListItem { Text = "New Caledonia", Value = "New Caledonia" });
+                countries.Add(new SelectListItem { Text = "New Zealand", Value = "New Zealand" });
+                countries.Add(new SelectListItem { Text = "Nicaragua", Value = "Nicaragua" });
+                countries.Add(new SelectListItem { Text = "Niger", Value = "Niger" });
+                countries.Add(new SelectListItem { Text = "Nigeria", Value = "Nigeria" });
+                countries.Add(new SelectListItem { Text = "Niue", Value = "Niue" });
+                countries.Add(new SelectListItem { Text = "Norfolk Island", Value = "Norfolk Island" });
+                countries.Add(new SelectListItem { Text = "Northern Mariana Islands", Value = "Northern Mariana Islands" });
+                countries.Add(new SelectListItem { Text = "Norway", Value = "Norway" });
+                countries.Add(new SelectListItem { Text = "Oman", Value = "Oman" });
+                countries.Add(new SelectListItem { Text = "Pakistan", Value = "Pakistan" });
+                countries.Add(new SelectListItem { Text = "Palau", Value = "Palau" });
+                countries.Add(new SelectListItem { Text = "Palestinian Territory, Occupied", Value = "Palestinian Territory, Occupied" });
+                countries.Add(new SelectListItem { Text = "Panama", Value = "Panama" });
+                countries.Add(new SelectListItem { Text = "Papua New Guinea", Value = "Papua New Guinea" });
+                countries.Add(new SelectListItem { Text = "Paraguay", Value = "Paraguay" });
+                countries.Add(new SelectListItem { Text = "Peru", Value = "Peru" });
+                countries.Add(new SelectListItem { Text = "Philippines", Value = "Philippines" });
+                countries.Add(new SelectListItem { Text = "Pitcairn", Value = "Pitcairn" });
+                countries.Add(new SelectListItem { Text = "Poland", Value = "Poland" });
+                countries.Add(new SelectListItem { Text = "Portugal", Value = "Portugal" });
+                countries.Add(new SelectListItem { Text = "Puerto Rico", Value = "Puerto Rico" });
+                countries.Add(new SelectListItem { Text = "Qatar", Value = "Qatar" });
+                countries.Add(new SelectListItem { Text = "Réunion", Value = "Réunion" });
+                countries.Add(new SelectListItem { Text = "Romania", Value = "Romania" });
+                countries.Add(new SelectListItem { Text = "Russian Federation", Value = "Russian Federation" });
+                countries.Add(new SelectListItem { Text = "Rwanda", Value = "Rwanda" });
+                countries.Add(new SelectListItem { Text = "Saint Barthélemy", Value = "Saint Barthélemy" });
+                countries.Add(new SelectListItem { Text = "Saint Helena, Ascension and Tristan da Cunha", Value = "Saint Helena, Ascension and Tristan da Cunha" });
+                countries.Add(new SelectListItem { Text = "Saint Kitts and Nevis", Value = "Saint Kitts and Nevis" });
+                countries.Add(new SelectListItem { Text = "Saint Lucia", Value = "Saint Lucia" });
+                countries.Add(new SelectListItem { Text = "Saint Martin (French part)", Value = "Saint Martin (French part)" });
+                countries.Add(new SelectListItem { Text = "Saint Pierre and Miquelon", Value = "Saint Pierre and Miquelon" });
+                countries.Add(new SelectListItem { Text = "Saint Vincent and the Grenadines", Value = "Saint Vincent and the Grenadines" });
+                countries.Add(new SelectListItem { Text = "Samoa", Value = "Samoa" });
+                countries.Add(new SelectListItem { Text = "San Marino", Value = "San Marino" });
+                countries.Add(new SelectListItem { Text = "Sao Tome and Principe", Value = "Sao Tome and Principe" });
+                countries.Add(new SelectListItem { Text = "Saudi Arabia", Value = "Saudi Arabia" });
+                countries.Add(new SelectListItem { Text = "Senegal", Value = "Senegal" });
+                countries.Add(new SelectListItem { Text = "Serbia", Value = "Serbia" });
+                countries.Add(new SelectListItem { Text = "Seychelles", Value = "Seychelles" });
+                countries.Add(new SelectListItem { Text = "Sierra Leone", Value = "Sierra Leone" });
+                countries.Add(new SelectListItem { Text = "Singapore", Value = "Singapore" });
+                countries.Add(new SelectListItem { Text = "Sint Maarten (Dutch part)", Value = "Sint Maarten (Dutch part)" });
+                countries.Add(new SelectListItem { Text = "Slovakia", Value = "Slovakia" });
+                countries.Add(new SelectListItem { Text = "Slovenia", Value = "Slovenia" });
+                countries.Add(new SelectListItem { Text = "Solomon Islands", Value = "Solomon Islands" });
+                countries.Add(new SelectListItem { Text = "Somalia", Value = "Somalia" });
+                countries.Add(new SelectListItem { Text = "South Africa", Value = "South Africa" });
+                countries.Add(new SelectListItem { Text = "South Georgia and the South Sandwich Islands", Value = "South Georgia and the South Sandwich Islands" });
+                countries.Add(new SelectListItem { Text = "South Sudan", Value = "South Sudan" });
+                countries.Add(new SelectListItem { Text = "Spain", Value = "Spain" });
+                countries.Add(new SelectListItem { Text = "Sri Lanka", Value = "Sri Lanka" });
+                countries.Add(new SelectListItem { Text = "Sudan", Value = "Sudan" });
+                countries.Add(new SelectListItem { Text = "Suriname", Value = "Suriname" });
+                countries.Add(new SelectListItem { Text = "Svalbard and Jan Mayen", Value = "Svalbard and Jan Mayen" });
+                countries.Add(new SelectListItem { Text = "Swaziland", Value = "Swaziland" });
+                countries.Add(new SelectListItem { Text = "Sweden", Value = "Sweden" });
+                countries.Add(new SelectListItem { Text = "Switzerland", Value = "Switzerland" });
+                countries.Add(new SelectListItem { Text = "Syrian Arab Republic", Value = "Syrian Arab Republic" });
+                countries.Add(new SelectListItem { Text = "Taiwan, Province of China", Value = "Taiwan, Province of China" });
+                countries.Add(new SelectListItem { Text = "Tajikistan", Value = "Tajikistan" });
+                countries.Add(new SelectListItem { Text = "Tanzania, United Republic of", Value = "Tanzania, United Republic of" });
+                countries.Add(new SelectListItem { Text = "Thailand", Value = "Thailand" });
+                countries.Add(new SelectListItem { Text = "Timor-Leste", Value = "Timor-Leste" });
+                countries.Add(new SelectListItem { Text = "Togo", Value = "Togo" });
+                countries.Add(new SelectListItem { Text = "Tokelau", Value = "Tokelau" });
+                countries.Add(new SelectListItem { Text = "Tonga", Value = "Tonga" });
+                countries.Add(new SelectListItem { Text = "Trinidad and Tobago", Value = "Trinidad and Tobago" });
+                countries.Add(new SelectListItem { Text = "Turkey", Value = "Turkey" });
+                countries.Add(new SelectListItem { Text = "Turkmenistan", Value = "Turkmenistan" });
+                countries.Add(new SelectListItem { Text = "Turks and Caicos Islands", Value = "Turks and Caicos Islands" });
+                countries.Add(new SelectListItem { Text = "Tuvalu", Value = "Tuvalu" });
+                countries.Add(new SelectListItem { Text = "Uganda", Value = "Uganda" });
+                countries.Add(new SelectListItem { Text = "Ukraine", Value = "Ukraine" });
+                countries.Add(new SelectListItem { Text = "United Arab Emirates", Value = "United Arab Emirates" });
+                countries.Add(new SelectListItem { Text = "United Kingdom", Value = "United Kingdom" });
+                countries.Add(new SelectListItem { Text = "United States Minor Outlying Islands", Value = "United States Minor Outlying Islands" });
+                countries.Add(new SelectListItem { Text = "Uruguay", Value = "Uruguay" });
+                countries.Add(new SelectListItem { Text = "Uzbekistan", Value = "Uzbekistan" });
+                countries.Add(new SelectListItem { Text = "Vanuatu", Value = "Vanuatu" });
+                countries.Add(new SelectListItem { Text = "Venezuela, Bolivarian Republic of", Value = "Venezuela, Bolivarian Republic of" });
+                countries.Add(new SelectListItem { Text = "Viet Nam", Value = "Viet Nam" });
+                countries.Add(new SelectListItem { Text = "Virgin Islands, British", Value = "Virgin Islands, British" });
+                countries.Add(new SelectListItem { Text = "Virgin Islands, U.S.", Value = "Virgin Islands, U.S." });
+                countries.Add(new SelectListItem { Text = "Wallis and Futuna", Value = "Wallis and Futuna" });
+                countries.Add(new SelectListItem { Text = "Western Sahara", Value = "Western Sahara" });
+                countries.Add(new SelectListItem { Text = "Yemen", Value = "Yemen" });
+                countries.Add(new SelectListItem { Text = "Zambia", Value = "Zambia" });
+                countries.Add(new SelectListItem { Text = "Zimbabwe", Value = "Zimbabwe" });
+            }
+            @Html.DropDownListFor(model => model.c, countries, new { @class = "form-control"})
+        </div>
+        <div id="mobilePhoneDiv"class="form-group col-md-4">
+            <label for="mobile">Mobile Phone</label>
+            @*<input type="text" class="form-control" id="mobile">*@
+            @Html.TextBoxFor(model => model.mobile, new { @class = "form-control", @placeholder = "xxx-xxx-xxxx", @id = "mobile" })
+        </div>
+        <div id="officeExtensionDiv" class="form-group col-md-2">
+            <label for="officeExtension">Office Phone Extension</label>
+            <div class="input-group">
+                <span class="input-group-addon">Ext.</span>
+                @Html.TextBoxFor(model => model.physicalDeliveryOfficeName, new { @class = "form-control", @id = "officeExtension" })
+            </div>
+            @*<input type="text" class="form-control" id="officeExtension">*@
+            
+        </div>
+    </div>
+    <div class="form-row">
+        <div id="titleDiv" class="form-group col-md-6">
+            <label for="title">Job Title</label>
+            @*<input type="text" class="form-control" id="title">*@
+            @Html.TextBoxFor(model => model.title, new { @class = "form-control", @placeholder = "Job Title", @id = "title" })
+        </div>
+        <div class="form-group col-md-4">
+            <label for="department">Department</label>
+            @{
+                List<SelectListItem> departments = new List<SelectListItem>();
+                departments.Add(new SelectListItem { Text = "Accounting", Value = "Accounting" });
+                departments.Add(new SelectListItem { Text = "Engineering", Value = "Engineering" });
+                departments.Add(new SelectListItem { Text = "Human Resources", Value = "HR" });
+                departments.Add(new SelectListItem { Text = "Information Technology", Value = "IT" });
+                departments.Add(new SelectListItem { Text = "Production", Value = "Production" });
+                departments.Add(new SelectListItem { Text = "Research and Development", Value = "RD" });
+                departments.Add(new SelectListItem { Text = "Quality", Value = "QA" });
+                departments.Add(new SelectListItem { Text = "Executive", Value = "Executive" });
+            }
+            @Html.DropDownListFor(model => model.department, departments, "Choose Department...", new { @class = "form-control", @id="department"})
+        </div>
+        <div id="employeeIdDiv"class="form-group col-md-2">
+            <label for="employeeId">Employee ID</label>
+            @*<input type="text" class="form-control" id="employeeId">*@
+            @Html.TextBoxFor(model => model.employeeID, new { @class = "form-control", @placeholder = "e.g. 12345", @id = "employeeId" })
+        </div>
+    </div>
+    <div class="form-row">
+        <div id="aliasDiv" class="form-group col-md-2">
+            <label for="alias">Alias</label>
+            @*<input type="text" class="form-control" id="alias">*@
+            @Html.TextBoxFor(model => model.sAMAccountName, new { @class = "form-control", @placeholder = "Alias (usually initials)", @id = "alias" })
+        </div>
+        <div id="managerDiv" class="form-group col-md-4">
+            <label for="manager">Supervisor</label>
+                @*<input type="text" class="form-control" id="manager" placeholder="Search for supervisor...">*@
+                @Html.DropDownListFor(model => model.manager, Enumerable.Empty<SelectListItem>(),"Choose a supervisor...", new { @class = "form-control", @placeholder = "Search for supervisor", @id = "manager" })
+        </div>
+        <div id="emailDiv" class="form-group col-md-4">
+            <label for="email">Email Prefix</label>
+            <div class="input-group">
+                @Html.TextBoxFor(model => model.mail, new { @class = "form-control", @id = "email" })
+                <span class="input-group-addon">@@multisorb.com</span>
+            </div>
+        </div>
+        <div id="telephoneDiv" class="form-group col-md-2">
+            <label for="telephone">Direct Telephone</label>
+            @*<input type="text" class="form-control" id="telephone">*@
+            @Html.TextBoxFor(model => model.telephoneNumber, new { @class = "form-control", @placeholder = "xxx-xxx-xxxx", @id = "telephone" })
+        </div>
+    </div>
+    <br />
+    <button type="submit" name="save" formaction="Index" formmethod="post" class="btn btn-primary">Create User</button>
+</form>
+}
+@Scripts.Render("~/Scripts/CreateUser.js")

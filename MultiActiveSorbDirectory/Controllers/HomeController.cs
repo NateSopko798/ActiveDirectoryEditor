@@ -133,6 +133,14 @@ namespace MultiActiveSorbDirectory.Controllers
             }
             try
             {
+                m.employeeID = user.Properties["employeeID"][0].ToString();
+            }
+            catch
+            {
+                m.employeeID = "";
+            }
+            try
+            {
                 m.c = user.Properties["C"][0].ToString();
             }
             catch
@@ -275,6 +283,14 @@ namespace MultiActiveSorbDirectory.Controllers
             catch
             {
                 m.pwdLastSet = "";
+            }
+            try
+            {
+                m.physicalDeliveryOfficeName = user.Properties["physicalDeliveryOfficeName"][0].ToString();
+            }
+            catch
+            {
+                m.physicalDeliveryOfficeName = "";
             }
             try
             {
