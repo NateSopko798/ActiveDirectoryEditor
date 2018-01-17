@@ -23,20 +23,11 @@ $(document).ready(function () {
         dataType: 'json',
         success: function (response) {
             $.each(response, function (i, item) {
-                //document.write(item.ShopID + ", " + item.ShopName + ", " + item.ShopAddress + ", " + item.ShopCategory);
                 $('#manager').append($("<option />").val(item.sAMAccountName).text(item.displayName));
             });
         }
     })
 });
-
-$('#department').change(function(){
-    alert($('#department').val());
-})
-
-$('#supervisorSearch').click(function () {
-    
-})
 
 function hasErrors() {
     if ($('#firstNameDiv').hasClass("has-warning") || $('#firstNameDiv').hasClass("has-error")) { alert("this1"); return true; }

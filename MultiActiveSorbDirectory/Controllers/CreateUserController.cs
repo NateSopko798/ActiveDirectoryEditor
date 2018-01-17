@@ -41,6 +41,54 @@ namespace MultiActiveSorbDirectory.Controllers
             return false ;
         }
 
+        private bool createUserNow(Account m)
+        {
+            // connect to LDAP  
+
+            DirectoryEntry myLdapConnection = new DirectoryEntry("LDAP://OU=Users,OU=Harlem Road,DC=multisorb,DC=com", "Administrator", "325H@l3m!");
+
+            // define vars for user  
+
+            DirectoryEntry user = myLdapConnection.Children.Add(
+                                 "CN=" + m.givenName + " " + m.SN, "user");
+
+            // User name (domain based)   
+            user.Properties["userprincipalname"].Add(m.sAMAccountName + "@multisorb.com");
+
+            // User name (older systems)  
+            user.Properties["samaccountname"].Add(m.sAMAccountName);
+
+            // Surname  
+            user.Properties["sn"].Add(m.SN);
+
+            // Forename  
+            user.Properties["givenname"].Add(m.givenName);
+
+            // Display name
+            user.Properties["displayname"].Add(m.SN + ", " + m.givenName + " " + m.initials + ".");
+
+            // E-mail  
+            user.Properties["mail"].Add(m.mail + "@multisorb.com");
+
+            //Country
+            user.Properties["c"].Add(m.c);
+
+            //title
+            user.Properties["title"].Add(m.title);
+
+            //Department
+            user.Properties["department"].Add(m.department);
+
+            //commit the property changes
+            user.CommitChanges();
+
+            // set user's password  
+            user.Invoke("SetPassword", "Mti@325");
+
+            //enable account
+            user.Invoke("Put", new object[] { "userAccountControl", "512" });
+        }
+
         [HttpPost]
         public ActionResult Index(Account obj)
         {
@@ -50,6 +98,7 @@ namespace MultiActiveSorbDirectory.Controllers
             }
             else
             {
+
                 return RedirectToAction("Index", "Home");
             }
         }
