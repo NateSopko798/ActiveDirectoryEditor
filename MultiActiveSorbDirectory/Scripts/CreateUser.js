@@ -17,9 +17,8 @@ $(document).ready(function () {
     $('#aliasDiv').addClass("has-warning");
     $('#emailDiv').addClass("has-warning");
     $('#telephoneDiv').addClass("has-warning");
-    //$('#manager').append($("<option />").val("thisnewoption").text("thisnewoption"));
     $.ajax({
-        url: "populateSupervisors",
+        url: "/CreateUser/populateSupervisors",
         type: "POST",
         dataType: 'json',
         success: function (response) {

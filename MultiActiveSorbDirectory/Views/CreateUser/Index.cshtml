@@ -412,7 +412,7 @@
         <div id="managerDiv" class="form-group col-md-4">
             <label for="manager">Supervisor</label>
                 @*<input type="text" class="form-control" id="manager" placeholder="Search for supervisor...">*@
-                @Html.DropDownListFor(model => model.manager, Enumerable.Empty<SelectListItem>(),"Choose a supervisor...", new { @class = "form-control", @placeholder = "Search for supervisor", @id = "manager" })
+                @Html.DropDownListFor(model => model.manager, Enumerable.Empty<SelectListItem>(),"Select a person", new { @class = "form-control", @id = "manager" })
         </div>
         <div id="emailDiv" class="form-group col-md-4">
             <label for="email">Email Prefix</label>
