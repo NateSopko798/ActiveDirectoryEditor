@@ -10,7 +10,7 @@ $('#search').keyup(function () {
 
 $(document).ready(function () {
     $rows.each(function () {
-        if ($(this).find("td:nth(22)").text() == "Account Disabled") {
+        if ($(this).find("td:nth(22)").text() === "Account Disabled") {
             $(this).addClass("highlight");
         }
     });
@@ -23,7 +23,7 @@ $('#userTable tbody').on('click', 'tr', function () {
     var currentRow = $(this);
     alias = $(this).find("td:nth(3)").text();
     $(".form-content").html("Please choose an action below for " + $(this).find("td:first").text() + "'s user account");
-    if ($(this).find("td:nth(22)").text() == "Account Disabled") {
+    if ($(this).find("td:nth(22)").text() === "Account Disabled") {
         var modal = bootbox.dialog({
             message: $(".form-content").html(),
             title: "User Control Panel",
@@ -52,7 +52,7 @@ $('#userTable tbody').on('click', 'tr', function () {
                           },
                           dataType: 'json',
                           success: function (response) {
-                              if (response.success == true) {
+                              if (response.success === true) {
                                   $("#userTable").find("td:contains('" + alias + "')").closest('tr').removeClass("highlight");
                                   $("#userTable").find("td:contains('" + alias + "')").closest('tr').find("td:nth(22)").html("Account Enabled");
                               }
@@ -60,7 +60,7 @@ $('#userTable tbody').on('click', 'tr', function () {
                                   alert("Enable didn't work, sorry.");
                               }
                           }
-                      })
+                      });
                   }
               },
               {
@@ -75,14 +75,14 @@ $('#userTable tbody').on('click', 'tr', function () {
                           },
                           dataType: 'json',
                           success: function (response) {
-                              if (response.success == true) {
-                                  alert("Password successfully reset")
+                              if (response.success === true) {
+                                  alert("Password successfully reset");
                               }
                               else {
                                   alert("Reset didn't work, sorry.");
                               }
                           }
-                      })
+                      });
                   }
               },
               {
@@ -97,20 +97,20 @@ $('#userTable tbody').on('click', 'tr', function () {
                           },
                           dataType: 'json',
                           success: function (response) {
-                              if (response.success == true) {
-                                  alert("Account Unlocked")
+                              if (response.success === true) {
+                                  alert("Account Unlocked");
                               }
                               else {
                                   alert("Unlock didn't work, sorry.");
                               }
                           }
-                      })
+                      });
                   }
               },
               {
                   label: "Close",
-                  className: "btn btn-default pull-right",
-              },
+                  className: "btn btn-default pull-right"
+              }
 
             ],
             show: false,
@@ -120,7 +120,7 @@ $('#userTable tbody').on('click', 'tr', function () {
         });
     }
     else {
-        var modal = bootbox.dialog({
+        modal = bootbox.dialog({
             message: $(".form-content").html(),
             title: "User Control Panel",
             buttons: [
@@ -145,7 +145,7 @@ $('#userTable tbody').on('click', 'tr', function () {
                           },
                           dataType: 'json',
                           success: function (response) {
-                              if (response.success == true) {
+                              if (response.success === true) {
                                   $("#userTable").find("td:contains('" + alias + "')").closest('tr').addClass("highlight");
                                   $("#userTable").find("td:contains('" + alias + "')").closest('tr').find("td:nth(22)").html("Account Disabled");
                               }
@@ -153,7 +153,7 @@ $('#userTable tbody').on('click', 'tr', function () {
                                   alert("Disable didn't work, sorry.");
                               }
                           }
-                      })
+                      });
                   }
               },
               {
@@ -168,14 +168,14 @@ $('#userTable tbody').on('click', 'tr', function () {
                           },
                           dataType: 'json',
                           success: function (response) {
-                              if (response.success == true) {
-                                  alert("Password successfully reset")
+                              if (response.success === true) {
+                                  alert("Password successfully reset");
                               }
                               else {
                                   alert("Reset didn't work, sorry.");
                               }
                           }
-                      })
+                      });
                   }
               },
               {
@@ -190,19 +190,19 @@ $('#userTable tbody').on('click', 'tr', function () {
                           },
                           dataType: 'json',
                           success: function (response) {
-                              if (response.success == true) {
-                                  alert("Account Unlocked")
+                              if (response.success === true) {
+                                  alert("Account Unlocked");
                               }
                               else {
                                   alert("Unlock didn't work, sorry.");
                               }
                           }
-                      })
+                      });
                   }
               },
               {
                   label: "Close",
-                  className: "btn btn-default pull-right",
+                  className: "btn btn-default pull-right"
               }
             ],
             show: false,

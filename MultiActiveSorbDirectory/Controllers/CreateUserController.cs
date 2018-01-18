@@ -30,7 +30,6 @@ namespace MultiActiveSorbDirectory.Controllers
             if (m.mail == null) { return true; }
             if (m.manager == null) { return true; }
             if (m.mobile == null) { return true; }
-            if (m.physicalDeliveryOfficeName == null) { return true; }
             if (m.postalCode == null) { return true; }
             if (m.sAMAccountName == null) { return true; }
             if (m.SN == null) { return true; }
@@ -39,6 +38,37 @@ namespace MultiActiveSorbDirectory.Controllers
             if (m.telephoneNumber == null) { return true; }
             if (m.title == null) { return true; }
             return false ;
+        }
+
+        private string getDistinguishedName(String user, DirectoryEntry de)
+        {
+            DirectorySearcher searcher = new DirectorySearcher(de)
+            {
+                PageSize = int.MaxValue,
+                Filter = "(&(objectCategory=person)(objectClass=user)(sAMAccountName=" + user + "))"
+            };
+
+            var result = searcher.FindOne();
+
+            if (result == null)
+            {
+                return "";
+            }
+            try
+            {
+                string DN = "";
+
+                if (result.Properties.Contains("distinguishedName"))
+                {
+                    DN = result.Properties["distinguishedName"][0].ToString();
+                }
+                return DN;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return "";
+            }
         }
 
         private bool createUserNow(Account m)
@@ -79,14 +109,121 @@ namespace MultiActiveSorbDirectory.Controllers
             //Department
             user.Properties["department"].Add(m.department);
 
-            //commit the property changes
-            user.CommitChanges();
+            //Telephone number
+            user.Properties["telephoneNumber"].Add(m.telephoneNumber);
 
-            // set user's password  
-            user.Invoke("SetPassword", "Mti@325");
+            //Street
+            user.Properties["streetAddress"].Add(m.streetAddress);
 
-            //enable account
-            user.Invoke("Put", new object[] { "userAccountControl", "512" });
+            //City
+            user.Properties["l"].Add(m.l);
+
+            //State
+            user.Properties["st"].Add(m.st);
+
+            //Postal Code
+            user.Properties["postalCode"].Add(m.postalCode);
+
+            
+
+            //Mobile Phone
+            user.Properties["mobile"].Add(m.mobile);
+
+            //Company
+            user.Properties["company"].Add("Multisorb");
+
+
+            //Manager
+            String managerDN = getDistinguishedName(m.manager, myLdapConnection);
+            if (managerDN == "")
+            {
+                return false;
+            }
+            else
+            {
+                user.Properties["manager"].Add(managerDN);
+            }
+
+            try
+            {
+                //commit the property changes
+                user.CommitChanges();
+
+                //Logon Script //might be breaking
+                user.Properties["scriptPath"].Add("login.vbs");
+
+                //EmployeeID //might be breaking
+                user.Properties["employeeID"].Add(m.employeeID);
+
+                //commit the property changes
+                user.CommitChanges();
+
+                // set user's password 
+                user.Invoke("SetPassword", "Mti@325");
+
+                //enable account
+                user.Invoke("Put", new object[] { "userAccountControl", "512" });
+                return true;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return false;
+            }
+            
+        }
+
+        [HttpPost]
+        public JsonResult checkAlias(String alias)
+        {
+            if (alias == "")
+            {
+                return Json(new { success = false, error = "Alias cannot be blank" }, JsonRequestBehavior.AllowGet);
+            }
+            try
+            {
+                DirectoryEntry myLdapConnection = new DirectoryEntry("LDAP://OU=Users,OU=Harlem Road,DC=multisorb,DC=com", "Administrator", "325H@l3m!");
+
+                DirectorySearcher search = new DirectorySearcher(myLdapConnection);
+                search.Filter = "(sAMAccountName=" + alias + ")";
+                SearchResult result = search.FindOne();
+
+                if (result == null)
+                {
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+                else return Json(new { success = false, error="Alias taken already" }, JsonRequestBehavior.AllowGet);
+            }
+
+            catch (Exception e)
+            {
+                return Json(new { success = false, error = "Show this to an IT person please: "+e.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult checkEmail(String mail)
+        {
+            try
+            {
+                DirectoryEntry myLdapConnection = new DirectoryEntry("LDAP://OU=Users,OU=Harlem Road,DC=multisorb,DC=com", "Administrator", "325H@l3m!");
+
+
+                DirectorySearcher search = new DirectorySearcher(myLdapConnection);
+                search.Filter = "(mail=" + mail + ")";
+                SearchResult result = search.FindOne();
+
+                if (result == null)
+                {
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+                else return Json(new { success = false, error = "Email address taken already" }, JsonRequestBehavior.AllowGet);
+            }
+
+            catch (Exception e)
+            {
+                return Json(new { success = false, error = "Show this to an IT person please: " + e.ToString() }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpPost]
@@ -98,8 +235,14 @@ namespace MultiActiveSorbDirectory.Controllers
             }
             else
             {
-
-                return RedirectToAction("Index", "Home");
+                if (createUserNow(obj))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return View();
+                }
             }
         }
 

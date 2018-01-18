@@ -477,7 +477,7 @@ namespace MultiActiveSorbDirectory.Controllers
 
             catch (Exception e)
             {
-                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, error = e.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -505,7 +505,7 @@ namespace MultiActiveSorbDirectory.Controllers
 
             catch (Exception e)
             {
-                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, error=e.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -533,7 +533,7 @@ namespace MultiActiveSorbDirectory.Controllers
 
             catch (Exception e)
             {
-                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, error = e.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -561,7 +561,7 @@ namespace MultiActiveSorbDirectory.Controllers
 
             catch (Exception e)
             {
-                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, error = e.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
 

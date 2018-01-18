@@ -9,36 +9,36 @@
     </div><!-- /.col-lg-12 -->
 </div>
 <br />
-@using (Html.BeginForm())
+@using (Html.BeginForm("Index", "CreateUser", FormMethod.Post, new { id = "createUserForm" }))
 {
-<form autocomplete="off" id="createUserForm">
+<form autocomplete="off">
     <div class="form-row">
         <div id ="firstNameDiv" class="form-group col-md-5">
             <label for="firstName">First Name</label>
             @*<input type="text" class="form-control" id="firstName" placeholder="First Name">*@
-            @Html.TextBoxFor(model => model.givenName, new { @class = "form-control", @placeholder = "First Name", @id = "firstName" })
+            @Html.TextBoxFor(model => model.givenName, new { @autocomplete = "off", @class = "form-control", @placeholder = "First Name", @id = "firstName" })
         </div>
         <div id="initialsDiv"class="form-group col-md-2">
             <label for="initials">Middle Initial</label>
             @*<input type="text" class="form-control" id="initials" placeholder="Middle Initial">*@
-            @Html.TextBoxFor(model => model.initials, new { @class = "form-control", @placeholder = "Middle Initial", @id = "initials" })
+            @Html.TextBoxFor(model => model.initials, new { @autocomplete = "off", @class = "form-control", @placeholder = "Middle Initial", @id = "initials" })
         </div>
         <div id="lastNameDiv"class="form-group col-md-5">
             <label for="lastName">Last Name</label>
             @*<input type="text" class="form-control" id="lastName" placeholder="Last Name">*@
-            @Html.TextBoxFor(model => model.SN, new { @class = "form-control", @placeholder = "Last Name", @id = "lastName" })
+            @Html.TextBoxFor(model => model.SN, new { @autocomplete = "off", @class = "form-control", @placeholder = "Last Name", @id = "lastName" })
         </div>
     </div>
     <div id="addressDiv"class="form-group col-md-12">
         <label for="address">Address</label>
         @*<input type="text" class="form-control" id="address" placeholder="Street Address">*@
-        @Html.TextBoxFor(model => model.streetAddress, new { @class = "form-control", @Value="325 Harlem Rd.", @id = "address" })
+        @Html.TextBoxFor(model => model.streetAddress, new { @autocomplete = "off", @class = "form-control", @Value="325 Harlem Rd.", @id = "address" })
     </div>
     <div class="form-row">
         <div id="cityDiv"class="form-group col-md-6">
             <label for="city">City</label>
             @*<input type="text" class="form-control" id="city">*@
-            @Html.TextBoxFor(model => model.l, new { @class = "form-control", @Value="West Seneca", @id = "city" })
+            @Html.TextBoxFor(model => model.l, new { @autocomplete = "off", @class = "form-control", @Value="West Seneca", @id = "city" })
         </div>
         <div class="form-group col-md-4">
             <label for="state">State</label>
@@ -101,7 +101,7 @@
         <div id="zipCodeDiv"class="form-group col-md-2">
             <label for="zipCode">Zip Code</label>
             @*<input type="text" class="form-control" id="zipCode">*@
-            @Html.TextBoxFor(model => model.postalCode, new { @class = "form-control", @Value="14224", @id = "zipCode" })
+            @Html.TextBoxFor(model => model.postalCode, new { @autocomplete = "off", @class = "form-control", @Value="14224", @id = "zipCode" })
         </div>
     </div>
     <div class="form-row">
@@ -109,8 +109,8 @@
             <label for="country">Country</label>
             @{
                 List<SelectListItem> countries = new List<SelectListItem>();
-                countries.Add(new SelectListItem { Text = "United States", Value = "United States",Selected=true });
-                countries.Add(new SelectListItem { Text = "India", Value = "India" });
+                countries.Add(new SelectListItem { Text = "United States", Value = "US",Selected=true });
+                countries.Add(new SelectListItem { Text = "India", Value = "IN" });
                 countries.Add(new SelectListItem { Text = "Åland Islands", Value = "Åland Islands" });
                 countries.Add(new SelectListItem { Text = "Albania", Value = "Albania" });
                 countries.Add(new SelectListItem { Text = "Algeria", Value = "Algeria" });
@@ -364,13 +364,13 @@
         <div id="mobilePhoneDiv"class="form-group col-md-4">
             <label for="mobile">Mobile Phone</label>
             @*<input type="text" class="form-control" id="mobile">*@
-            @Html.TextBoxFor(model => model.mobile, new { @class = "form-control", @placeholder = "xxx-xxx-xxxx", @id = "mobile" })
+            @Html.TextBoxFor(model => model.mobile, new { @autocomplete = "off", @class = "form-control", @placeholder = "xxx-xxx-xxxx", @id = "mobile" })
         </div>
         <div id="officeExtensionDiv" class="form-group col-md-2">
             <label for="officeExtension">Office Phone Extension</label>
             <div class="input-group">
                 <span class="input-group-addon">Ext.</span>
-                @Html.TextBoxFor(model => model.physicalDeliveryOfficeName, new { @class = "form-control", @id = "officeExtension" })
+                @Html.TextBoxFor(model => model.physicalDeliveryOfficeName, new { @autocomplete = "off", @class = "form-control", @id = "officeExtension" })
             </div>
             @*<input type="text" class="form-control" id="officeExtension">*@
             
@@ -380,7 +380,7 @@
         <div id="titleDiv" class="form-group col-md-6">
             <label for="title">Job Title</label>
             @*<input type="text" class="form-control" id="title">*@
-            @Html.TextBoxFor(model => model.title, new { @class = "form-control", @placeholder = "Job Title", @id = "title" })
+            @Html.TextBoxFor(model => model.title, new { @autocomplete = "off", @class = "form-control", @placeholder = "Job Title", @id = "title" })
         </div>
         <div class="form-group col-md-4">
             <label for="department">Department</label>
@@ -400,14 +400,14 @@
         <div id="employeeIdDiv"class="form-group col-md-2">
             <label for="employeeId">Employee ID</label>
             @*<input type="text" class="form-control" id="employeeId">*@
-            @Html.TextBoxFor(model => model.employeeID, new { @class = "form-control", @placeholder = "e.g. 12345", @id = "employeeId" })
+            @Html.TextBoxFor(model => model.employeeID, new { @autocomplete = "off", @class = "form-control", @placeholder = "e.g. 12345", @id = "employeeId" })
         </div>
     </div>
     <div class="form-row">
         <div id="aliasDiv" class="form-group col-md-2">
             <label for="alias">Alias</label>
             @*<input type="text" class="form-control" id="alias">*@
-            @Html.TextBoxFor(model => model.sAMAccountName, new { @class = "form-control", @placeholder = "Alias (usually initials)", @id = "alias" })
+            @Html.TextBoxFor(model => model.sAMAccountName, new { @autocomplete = "off", @class = "form-control", @placeholder = "Alias (usually initials)", @id = "alias" })
         </div>
         <div id="managerDiv" class="form-group col-md-4">
             <label for="manager">Supervisor</label>
@@ -417,18 +417,20 @@
         <div id="emailDiv" class="form-group col-md-4">
             <label for="email">Email Prefix</label>
             <div class="input-group">
-                @Html.TextBoxFor(model => model.mail, new { @class = "form-control", @id = "email" })
+                @Html.TextBoxFor(model => model.mail, new { @autocomplete = "off", @class = "form-control", @id = "email" })
                 <span class="input-group-addon">@@multisorb.com</span>
             </div>
         </div>
         <div id="telephoneDiv" class="form-group col-md-2">
             <label for="telephone">Direct Telephone</label>
             @*<input type="text" class="form-control" id="telephone">*@
-            @Html.TextBoxFor(model => model.telephoneNumber, new { @class = "form-control", @placeholder = "xxx-xxx-xxxx", @id = "telephone" })
+            @Html.TextBoxFor(model => model.telephoneNumber, new { @autocomplete = "off", @class = "form-control", @placeholder = "xxx-xxx-xxxx", @id = "telephone" })
         </div>
     </div>
     <br />
-    <button type="submit" name="save" formaction="/CreateUser/Index" formmethod="post" class="btn btn-primary">Create User</button>
+    @*<button type="submit" name="save" formaction="/CreateUser/Index" formmethod="post" class="btn btn-primary">Create User</button>*@
+    
 </form>
 }
+<button type ="submit" name="submit" id="submitForm" class="btn btn-primary">Create User</button>
 @Scripts.Render("~/Scripts/CreateUser.js")

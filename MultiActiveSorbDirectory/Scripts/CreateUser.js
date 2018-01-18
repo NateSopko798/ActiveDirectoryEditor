@@ -22,43 +22,95 @@ $(document).ready(function () {
         type: "POST",
         dataType: 'json',
         success: function (response) {
+            response = response.sort(function (a, b) {
+                return a.displayName > b.displayName ? 1 : a.displayName < b.displayName ? -1 : 0;
+            });
             $.each(response, function (i, item) {
                 $('#manager').append($("<option />").val(item.sAMAccountName).text(item.displayName));
             });
         }
-    })
+    });
+});
+
+$('#submitForm').click(function () {
+    //do anything before post
+    //var errors = hasErrors();
+    //if (errors !== "") {
+    //    alert("Please fix " +errors+ " box before submitting new user");
+    //    return;
+    //}
+    //check alias
+    var alias = $('#alias').val();
+    var email = $('#email').val() + "@multisorb.com";
+    //var alias = "kc";
+    //var email = "NSopko@multisorb.com"
+    $.ajax({
+        url: "/CreateUser/checkAlias",
+        type: "POST",
+        data: {
+            alias: alias
+        },
+        dataType: 'json',
+        success: function (response) {
+            if (response.success === false) {
+                alert("Error: " + response.error);
+                $('#aliasDiv').addClass("has-error");
+                return;
+            }
+            else {
+                //check email
+                $.ajax({
+                    url: "/CreateUser/checkEmail",
+                    type: "POST",
+                    data: {
+                        mail: email
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success === false) {
+                            alert("Error: " + response.error);
+                            return;
+                        }
+                        else {
+                            //then submit
+                            document.getElementById("createUserForm").submit();
+                        }
+                    }
+                });
+            }
+        }
+    });
 });
 
 function hasErrors() {
-    if ($('#firstNameDiv').hasClass("has-warning") || $('#firstNameDiv').hasClass("has-error")) { alert("this1"); return true; }
-    if ($('#initialsDiv').hasClass("has-warning") || $('#initialsDiv').hasClass("has-error")) { alert("this2"); return true; }
-    if ($('#lastNameDiv').hasClass("has-warning") || $('#lastNameDiv').hasClass("has-error")) { alert("this3"); return true; }
-    if ($('#addressDiv').hasClass("has-warning") || $('#addressDiv').hasClass("has-error")) { alert("this4"); return true; }
-    if ($('#cityDiv').hasClass("has-warning") || $('#cityDiv').hasClass("has-error")) { alert("this5"); return true; }
-    if ($('#zipCodeDiv').hasClass("has-warning") || $('#zipCodeDiv').hasClass("has-error")) { alert("this6"); return true; }
-    if ($('#mobilePhoneDiv').hasClass("has-warning") || $('#mobilePhoneDiv').hasClass("has-error")) { alert("this7"); return true; }
-    if ($('#officeExtensionDiv').hasClass("has-warning") || $('#officeExtensionDiv').hasClass("has-error")) { alert("this8"); return true; }
-    if ($('#titleDiv').hasClass("has-warning") || $('#titleDiv').hasClass("has-error")) { alert("this9"); return true; }
-    if ($('#employeeIdDiv').hasClass("has-warning") || $('#employeeIdDiv').hasClass("has-error")) { alert("this10"); return true; }
-    if ($('#aliasDiv').hasClass("has-warning") || $('#aliasDiv').hasClass("has-error")) { alert("this11"); return true; }
-    if ($('#emailDiv').hasClass("has-warning") || $('#emailDiv').hasClass("has-error")) { alert("this12"); return true; }
-    if ($('#telephoneDiv').hasClass("has-warning") || $('#telephoneDiv').hasClass("has-error")) { alert("this13"); return true; }
-    if ($('#manager').val() == "") { alert("this14"); return true; }
-    if ($('#department').val() == "") { alert("this15"); return true; }
-    alert("Passed");
-    return false;
+    if ($('#firstNameDiv').hasClass("has-warning") || $('#firstNameDiv').hasClass("has-error")) { return "First Name"; }
+    if ($('#initialsDiv').hasClass("has-warning") || $('#initialsDiv').hasClass("has-error")) { return "Initial"; }
+    if ($('#lastNameDiv').hasClass("has-warning") || $('#lastNameDiv').hasClass("has-error")) { return "Last Name"; }
+    if ($('#addressDiv').hasClass("has-warning") || $('#addressDiv').hasClass("has-error")) { return "Street Address"; }
+    if ($('#cityDiv').hasClass("has-warning") || $('#cityDiv').hasClass("has-error")) { return "City"; }
+    if ($('#zipCodeDiv').hasClass("has-warning") || $('#zipCodeDiv').hasClass("has-error")) { return "Zip Code"; }
+    if ($('#mobilePhoneDiv').hasClass("has-warning") || $('#mobilePhoneDiv').hasClass("has-error")) { return "Mobile Phone"; }
+    if ($('#officeExtensionDiv').hasClass("has-warning") || $('#officeExtensionDiv').hasClass("has-error")) { return "Office Extension"; }
+    if ($('#titleDiv').hasClass("has-warning") || $('#titleDiv').hasClass("has-error")) { return "Job Title"; }
+    if ($('#employeeIdDiv').hasClass("has-warning") || $('#employeeIdDiv').hasClass("has-error")) { return "Employee ID"; }
+    if ($('#aliasDiv').hasClass("has-warning") || $('#aliasDiv').hasClass("has-error")) { return "Alias"; }
+    if ($('#emailDiv').hasClass("has-warning") || $('#emailDiv').hasClass("has-error")) { return "Email"; }
+    if ($('#telephoneDiv').hasClass("has-warning") || $('#telephoneDiv').hasClass("has-error")) { return "Telephone"; }
+    if ($('#manager').val() === "") { return "Manager"; }
+    if ($('#department').val() === "") { return "Department"; }
+    return "";
 }
 
 function updateAlias() {
     $('#alias').val(firstNameLetter + middleInitial + lastNameLetter);
-    if ($('#alias').val().length == 3) {
+    if ($('#alias').val().length === 3) {
         $('#aliasDiv').removeClass("has-error");
         $('#aliasDiv').removeClass("has-warning");
     }
 }
 function updateEmail() {
     $('#email').val(firstNameLetter.toUpperCase() + lastName);
-    if ($('#email').val().length !=0) {
+    if ($('#email').val().length !==0) {
         $('#emailDiv').removeClass("has-error");
         $('#emailDiv').removeClass("has-warning");
     }
@@ -87,7 +139,7 @@ $('#initials').keyup(function () {
         $('#initialsDiv').removeClass("has-warning");
         $('#initialsDiv').addClass("has-error");
     }
-    else if (word.length == 0) {
+    else if (word.length === 0) {
         $('#initialsDiv').removeClass("has-error");
         $('#initialsDiv').removeClass("has-warning");
         $('#initialsDiv').addClass("has-warning");
@@ -182,5 +234,32 @@ $('#telephone').keyup(function () {
     else {
         $('#telephoneDiv').removeClass("has-error");
         $('#telephoneDiv').removeClass("has-warning");
+    }
+});
+$('#employeeId').keyup(function () {
+    var word = $('#employeeId').val();
+    if (word.length > 5) {
+        $('#employeeIdDiv').removeClass("has-error");
+        $('#employeeIdDiv').removeClass("has-warning");
+        $('#employeeIdDiv').addClass("has-error");
+    }
+    else if (word.length < 5) {
+        $('#employeeIdDiv').removeClass("has-error");
+        $('#employeeIdDiv').removeClass("has-warning");
+        $('#employeeIdDiv').addClass("has-error");
+    }
+    else {
+        $('#employeeIdDiv').removeClass("has-error");
+        $('#employeeIdDiv').removeClass("has-warning");
+    }
+});
+$('#alias').keyup(function () {
+    var word = $('#alias').val();
+    if (word.length < 1) {
+        $('#aliasDiv').addClass("has-error");
+    }
+    else {
+        $('#aliasDiv').removeClass("has-error");
+        $('#aliasDiv').removeClass("has-warning");
     }
 });
