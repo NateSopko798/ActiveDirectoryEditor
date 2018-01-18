@@ -11,31 +11,28 @@ namespace MultiActiveSorbDirectory.Controllers
 {
     public class CreateUserController : Controller
     {
-        // GET: CreateUser
-        public ActionResult Index()
+        static DirectoryEntry createDirectoryEntry()
         {
-            return View();
+            //Create directory connection with credentials
+            DirectoryEntry directoryEntry = new DirectoryEntry("LDAP://OU=Users,OU=Harlem Road,DC=multisorb,DC=com", "Administrator", "325H@l3m!");
+            return directoryEntry;
         }
 
         private bool checkErrors(Account m)
         {
-            if (m.c == null) { return true; }
-            if (m.department == null) { return true; }
-            if (m.employeeID == null) { return true; }
-            if (m.givenName == null) { return true; }
-            if (m.initials == null) { return true; }
-            if (m.l == null) { return true; }
-            if (m.mail == null) { return true; }
-            if (m.manager == null) { return true; }
-            if (m.mobile == null) { return true; }
-            if (m.postalCode == null) { return true; }
-            if (m.sAMAccountName == null) { return true; }
-            if (m.SN == null) { return true; }
-            if (m.st == null) { return true; }
-            if (m.streetAddress == null) { return true; }
-            if (m.telephoneNumber == null) { return true; }
-            if (m.title == null) { return true; }
-            return false ;
+            if (m.c == null || m.department == null || m.employeeID == null ||
+                m.givenName == null || m.initials == null || m.l == null || 
+                m.mail == null || m.manager == null || m.mobile == null || 
+                m.postalCode == null || m.sAMAccountName == null || m.SN == null || 
+                m.st == null || m.streetAddress == null || m.telephoneNumber == null || 
+                m.title == null ||  m.physicalDeliveryOfficeName == null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private string getDistinguishedName(String user, DirectoryEntry de)
@@ -69,11 +66,66 @@ namespace MultiActiveSorbDirectory.Controllers
             }
         }
 
+        private string resetPasswordFromName(String sAMAccountName)
+        {
+            try
+            {
+                DirectoryEntry myLdapConnection = createDirectoryEntry();
+                DirectorySearcher search = new DirectorySearcher(myLdapConnection);
+                search.Filter = "(sAMAccountName=" + sAMAccountName + ")";
+                SearchResult result = search.FindOne();
+
+                if (result != null)
+                {
+                    DirectoryEntry entryToUpdate = result.GetDirectoryEntry();
+                    entryToUpdate.Invoke("SetPassword", new object[] { "Mti@325" });
+                    entryToUpdate.Properties["LockOutTime"].Value = 0;
+                    entryToUpdate.Properties["pwdLastSet"].Value = 0;
+                    entryToUpdate.CommitChanges();
+                    return "";
+                }
+
+                else return "error";
+            }
+
+            catch (Exception e)
+            {
+                return e.ToString();
+            }
+        }
+
+        private string enableUserFromName(String sAMAccountName)
+        {
+            try
+            {
+                DirectoryEntry myLdapConnection = new DirectoryEntry("LDAP://OU=Users,OU=Harlem Road,DC=multisorb,DC=com", "Administrator", "325H@l3m!");
+
+                DirectorySearcher search = new DirectorySearcher(myLdapConnection);
+                search.Filter = "(sAMAccountName=" + sAMAccountName + ")";
+                SearchResult result = search.FindOne();
+
+                if (result != null)
+                {
+                    DirectoryEntry entryToUpdate = result.GetDirectoryEntry();
+                    entryToUpdate.Invoke("Put", new object[] { "userAccountControl", "512" });
+                    entryToUpdate.CommitChanges();
+                    return "";
+                }
+
+                else return "error";
+            }
+
+            catch (Exception e)
+            {
+                return e.ToString();
+            }
+        }
+
         private string createUserNow(Account m)
         {
             // connect to LDAP  
 
-            DirectoryEntry myLdapConnection = new DirectoryEntry("LDAP://OU=Users,OU=Harlem Road,DC=multisorb,DC=com", "Administrator", "325H@l3m!");
+            DirectoryEntry myLdapConnection = createDirectoryEntry();
 
             // define vars for user  
 
@@ -154,26 +206,25 @@ namespace MultiActiveSorbDirectory.Controllers
                 user.Properties["manager"].Add(managerDN);
             }
 
+            //Apply changes to new user
             try
             {
-                //commit the property changes
                 user.CommitChanges();
-
-                // set user's password 
-                user.Invoke("SetPassword", "Mti@325");
-
-                //enable account
-                user.Invoke("Put", new object[] { "userAccountControl", "512" });
-                return "";
             }
             catch(Exception e)
             {
-                //Console.WriteLine(e.ToString());
                 return e.ToString();
             }
-            
+            return "";
         }
 
+        // GET: CreateUser
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        //POST: Check Alias Usage AJAX
         [HttpPost]
         public JsonResult checkAlias(String alias)
         {
@@ -183,7 +234,7 @@ namespace MultiActiveSorbDirectory.Controllers
             }
             try
             {
-                DirectoryEntry myLdapConnection = new DirectoryEntry("LDAP://OU=Users,OU=Harlem Road,DC=multisorb,DC=com", "Administrator", "325H@l3m!");
+                DirectoryEntry myLdapConnection = createDirectoryEntry();
 
                 DirectorySearcher search = new DirectorySearcher(myLdapConnection);
                 search.Filter = "(sAMAccountName=" + alias + ")";
@@ -202,13 +253,13 @@ namespace MultiActiveSorbDirectory.Controllers
             }
         }
 
+        //POST: Check Email Usage AJAX
         [HttpPost]
         public JsonResult checkEmail(String mail)
         {
             try
             {
-                DirectoryEntry myLdapConnection = new DirectoryEntry("LDAP://OU=Users,OU=Harlem Road,DC=multisorb,DC=com", "Administrator", "325H@l3m!");
-
+                DirectoryEntry myLdapConnection = createDirectoryEntry();
 
                 DirectorySearcher search = new DirectorySearcher(myLdapConnection);
                 search.Filter = "(mail=" + mail + ")";
@@ -227,6 +278,7 @@ namespace MultiActiveSorbDirectory.Controllers
             }
         }
 
+        //POST: Form Post Back
         [HttpPost]
         public ActionResult Index(Account obj)
         {
@@ -239,7 +291,25 @@ namespace MultiActiveSorbDirectory.Controllers
                 var returner = createUserNow(obj);
                 if (returner == "")
                 {
-                    return RedirectToAction("Index", "Home");
+                    returner = resetPasswordFromName(obj.sAMAccountName);
+                    if (returner == "")
+                    {
+                        returner = enableUserFromName(obj.sAMAccountName);
+                        if (returner == "")
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            ViewBag.error = returner;
+                            return View();
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.error = returner;
+                        return View();
+                    }
                 }
                 else
                 {
@@ -249,12 +319,13 @@ namespace MultiActiveSorbDirectory.Controllers
             }
         }
 
+        //POST: Get Manager Drop Down
         [HttpPost]
         public string populateSupervisors()
         {
             List<Person> people = new List<Person>();
 
-            DirectoryEntry de = new DirectoryEntry("LDAP://OU=Users,OU=Harlem Road,DC=multisorb,DC=com", "Administrator", "325H@l3m!");
+            DirectoryEntry de = createDirectoryEntry();
 
             ActiveDirectoryAccount viewModel = new ActiveDirectoryAccount();
             List<Account> allUsersView = new List<Account>();

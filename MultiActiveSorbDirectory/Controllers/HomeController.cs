@@ -12,6 +12,7 @@ namespace MultiActiveSorbDirectory.Controllers
     {
         static DirectoryEntry createDirectoryEntry()
         {
+            //Create directory connection
             DirectoryEntry directoryEntry = new DirectoryEntry("LDAP://OU=Users,OU=Harlem Road,DC=multisorb,DC=com", "Administrator", "325H@l3m!");
             return directoryEntry;
         }
@@ -414,37 +415,13 @@ namespace MultiActiveSorbDirectory.Controllers
             return View(viewModel);
         }
 
-        private ActionResult testSetup()
-        {
-            ActiveDirectoryAccount viewModel = new ActiveDirectoryAccount();
-            List<Account> allUsersView = new List<Account>();
-            Account m = new Account();
-            m.displayName = "Mountain, Lorie";
-            m.givenName = "Lorie";
-            m.SN = "Mountain";
-            m.sAMAccountName = "lam";
-            m.title = "Senior IS Support Technician";
-            m.department = "Information Technology";
-            allUsersView.Add(m);
-            Account m1 = new Account();
-            m1.displayName = "Fronczak, Greg";
-            m1.givenName = "Greg";
-            m1.SN = "Fronczak";
-            m1.sAMAccountName = "gcf";
-            m1.title = "Materials Group Manager";
-            m1.department = "Materials";
-            allUsersView.Add(m1);
-            viewModel.Accounts = allUsersView;
-            return View(viewModel);
-        }
-
+        //GET: Index
         public ActionResult Index()
         {
             return searchAllUsers(createDirectoryEntry());
-            //return searchByUserName("newSPC",createDirectoryEntry());
-            //return testSetup();
         }
 
+        //POST: Reset Password Command AJAX
         [HttpPost]
         public JsonResult resetPasswordFromName(String sAMAccountName)
         {
@@ -476,6 +453,7 @@ namespace MultiActiveSorbDirectory.Controllers
             }
         }
 
+        //POST: Unlock Account Command AJAX
         [HttpPost]
         public JsonResult unlockAccountFromName(String sAMAccountName)
         {
@@ -504,6 +482,7 @@ namespace MultiActiveSorbDirectory.Controllers
             }
         }
 
+        //POST: Disable User Command AJAX
         [HttpPost]
         public JsonResult disableUserFromName(String sAMAccountName)
         {
@@ -532,6 +511,7 @@ namespace MultiActiveSorbDirectory.Controllers
             }
         }
 
+        //POST: Enable User Command AJAX
         [HttpPost]
         public JsonResult enableUserFromName(String sAMAccountName)
         {
