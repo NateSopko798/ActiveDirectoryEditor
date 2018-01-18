@@ -11,8 +11,6 @@ namespace MultiActiveSorbDirectory.Controllers
 {
     public class CreateUserController : Controller
     {
-        List<Person> people = new List<Person>();
-
         // GET: CreateUser
         public ActionResult Index()
         {
@@ -71,7 +69,7 @@ namespace MultiActiveSorbDirectory.Controllers
             }
         }
 
-        private bool createUserNow(Account m)
+        private string createUserNow(Account m)
         {
             // connect to LDAP  
 
@@ -124,7 +122,8 @@ namespace MultiActiveSorbDirectory.Controllers
             //Postal Code
             user.Properties["postalCode"].Add(m.postalCode);
 
-            
+            //Office
+            user.Properties["physicalDeliveryOfficeName"].Add("Ext. "+m.physicalDeliveryOfficeName);
 
             //Mobile Phone
             user.Properties["mobile"].Add(m.mobile);
@@ -132,12 +131,23 @@ namespace MultiActiveSorbDirectory.Controllers
             //Company
             user.Properties["company"].Add("Multisorb");
 
+            //Logon Script //might be breaking
+            user.Properties["scriptPath"].Add("login.vbs");
+
+            //EmployeeID //might be breaking
+            user.Properties["employeeID"].Add(m.employeeID);
+
+            //Unlock account
+            user.Properties["LockOutTime"].Value = 0;
+
+            //Make them change password
+            user.Properties["pwdLastSet"].Value = 0;
 
             //Manager
             String managerDN = getDistinguishedName(m.manager, myLdapConnection);
             if (managerDN == "")
             {
-                return false;
+                return "Manager not found";
             }
             else
             {
@@ -149,26 +159,17 @@ namespace MultiActiveSorbDirectory.Controllers
                 //commit the property changes
                 user.CommitChanges();
 
-                //Logon Script //might be breaking
-                user.Properties["scriptPath"].Add("login.vbs");
-
-                //EmployeeID //might be breaking
-                user.Properties["employeeID"].Add(m.employeeID);
-
-                //commit the property changes
-                user.CommitChanges();
-
                 // set user's password 
                 user.Invoke("SetPassword", "Mti@325");
 
                 //enable account
                 user.Invoke("Put", new object[] { "userAccountControl", "512" });
-                return true;
+                return "";
             }
             catch(Exception e)
             {
-                Console.WriteLine(e.ToString());
-                return false;
+                //Console.WriteLine(e.ToString());
+                return e.ToString();
             }
             
         }
@@ -235,12 +236,14 @@ namespace MultiActiveSorbDirectory.Controllers
             }
             else
             {
-                if (createUserNow(obj))
+                var returner = createUserNow(obj);
+                if (returner == "")
                 {
                     return RedirectToAction("Index", "Home");
                 }
                 else
                 {
+                    ViewBag.error = returner;
                     return View();
                 }
             }
@@ -249,6 +252,8 @@ namespace MultiActiveSorbDirectory.Controllers
         [HttpPost]
         public string populateSupervisors()
         {
+            List<Person> people = new List<Person>();
+
             DirectoryEntry de = new DirectoryEntry("LDAP://OU=Users,OU=Harlem Road,DC=multisorb,DC=com", "Administrator", "325H@l3m!");
 
             ActiveDirectoryAccount viewModel = new ActiveDirectoryAccount();
@@ -267,6 +272,5 @@ namespace MultiActiveSorbDirectory.Controllers
             JavaScriptSerializer ser = new JavaScriptSerializer();
             return ser.Serialize(people);
         }
-
     }
 }

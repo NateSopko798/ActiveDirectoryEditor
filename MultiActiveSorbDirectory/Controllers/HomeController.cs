@@ -10,11 +10,6 @@ namespace MultiActiveSorbDirectory.Controllers
 {
     public class HomeController : Controller
     {
-        //List<String> propList = new List<string>();
-        //List<String> valList = new List<string>();
-        //List<String> userList = new List<string>();
-        //List<String> names = new List<string>();
-
         static DirectoryEntry createDirectoryEntry()
         {
             DirectoryEntry directoryEntry = new DirectoryEntry("LDAP://OU=Users,OU=Harlem Road,DC=multisorb,DC=com", "Administrator", "325H@l3m!");
@@ -563,20 +558,6 @@ namespace MultiActiveSorbDirectory.Controllers
             {
                 return Json(new { success = false, error = e.ToString() }, JsonRequestBehavior.AllowGet);
             }
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
         }
     }
 }

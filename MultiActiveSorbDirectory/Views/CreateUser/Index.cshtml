@@ -6,6 +6,10 @@
     <div class="col-lg-12" style ="text-align:center;">
         <h2>Create User Account</h2>
     <p>**All fields are mandatory**</p>
+    @if (ViewBag.errors != null)
+    {
+        <p style="color:red;">@ViewBag.errors</p>
+    }
     </div><!-- /.col-lg-12 -->
 </div>
 <br />
@@ -428,8 +432,6 @@
         </div>
     </div>
     <br />
-    @*<button type="submit" name="save" formaction="/CreateUser/Index" formmethod="post" class="btn btn-primary">Create User</button>*@
-    
 </form>
 }
 <button type ="submit" name="submit" id="submitForm" class="btn btn-primary">Create User</button>

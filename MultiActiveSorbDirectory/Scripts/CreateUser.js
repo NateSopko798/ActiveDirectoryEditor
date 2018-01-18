@@ -33,17 +33,15 @@ $(document).ready(function () {
 });
 
 $('#submitForm').click(function () {
-    //do anything before post
-    //var errors = hasErrors();
-    //if (errors !== "") {
-    //    alert("Please fix " +errors+ " box before submitting new user");
-    //    return;
-    //}
+    //do anything here before post
+    var errors = hasErrors();
+    if (errors !== "") {
+        alert("Please fix " +errors+ " box before submitting new user");
+        return;
+    }
     //check alias
     var alias = $('#alias').val();
     var email = $('#email').val() + "@multisorb.com";
-    //var alias = "kc";
-    //var email = "NSopko@multisorb.com"
     $.ajax({
         url: "/CreateUser/checkAlias",
         type: "POST",
@@ -69,6 +67,7 @@ $('#submitForm').click(function () {
                     success: function (response) {
                         if (response.success === false) {
                             alert("Error: " + response.error);
+                            $('#emailDiv').addClass("has-error");
                             return;
                         }
                         else {
@@ -216,16 +215,6 @@ $('#officeExtension').keyup(function () {
         $('#officeExtensionDiv').removeClass("has-warning");
     }
 });
-$('#employeeId').keyup(function () {
-    var word = $('#employeeId').val();
-    if (word.length < 1) {
-        $('#employeeIdDiv').addClass("has-error");
-    }
-    else {
-        $('#employeeIdDiv').removeClass("has-error");
-        $('#employeeIdDiv').removeClass("has-warning");
-    }
-});
 $('#telephone').keyup(function () {
     var word = $('#telephone').val();
     if (word.length < 1) {
@@ -261,5 +250,15 @@ $('#alias').keyup(function () {
     else {
         $('#aliasDiv').removeClass("has-error");
         $('#aliasDiv').removeClass("has-warning");
+    }
+});
+$('#city').keyup(function () {
+    var word = $('#city').val();
+    if (word.length < 1) {
+        $('#cityDiv').addClass("has-error");
+    }
+    else {
+        $('#cityDiv').removeClass("has-error");
+        $('#cityDiv').removeClass("has-warning");
     }
 });
