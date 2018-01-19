@@ -36,6 +36,7 @@ namespace MultiActiveSorbDirectory.Models
         public string streetAddress { get; set; } //First line of address
         public string telephoneNumber { get; set; } //Office Phone
         public string userAccountControl { get; set; } //Enable (512) / disable account (514)
+        public string managerAlias { get; set; }
     }
 
     public class Person

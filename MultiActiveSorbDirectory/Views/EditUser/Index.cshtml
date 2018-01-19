@@ -13,7 +13,7 @@
     </div><!-- /.col-lg-12 -->
 </div>
 <br />
-@using (Html.BeginForm("Index", "EditUser", FormMethod.Post, new { id = "editUserForm" }))
+@using (Html.BeginForm("editUser", "EditUser", FormMethod.Post, new { id = "editUserForm" }))
 {
     <form autocomplete="off">
         <div class="form-row">
@@ -411,7 +411,7 @@
             <div id="aliasDiv" class="form-group col-md-2">
                 <label for="alias">Alias</label>
                 @*<input type="text" class="form-control" id="alias">*@
-                @Html.TextBoxFor(model => model.sAMAccountName, new { @autocomplete = "off", @class = "form-control", @placeholder = "Alias (usually initials)", @id = "alias" })
+                @Html.TextBoxFor(model => model.sAMAccountName, new { @autocomplete = "off", @class = "form-control", @placeholder = "Alias (usually initials)", @id = "alias", @readonly = "readonly" })
             </div>
             <div id="managerDiv" class="form-group col-md-4">
                 <label for="manager">Supervisor</label>
@@ -421,7 +421,7 @@
             <div id="emailDiv" class="form-group col-md-4">
                 <label for="email">Email Prefix</label>
                 <div class="input-group">
-                    @Html.TextBoxFor(model => model.mail, new { @autocomplete = "off", @class = "form-control", @id = "email" })
+                    @Html.TextBoxFor(model => model.mail, new { @autocomplete = "off", @class = "form-control", @id = "email", @readonly = "readonly" })
                     <span class="input-group-addon">@@multisorb.com</span>
                 </div>
             </div>
@@ -435,4 +435,4 @@
     </form>
                     }
 <button type="submit" name="submit" id="submitForm" class="btn btn-primary">Save Changes to User</button>
-@Scripts.Render("~/Scripts/AccountSearch.js")
+@Scripts.Render("~/Scripts/EditUser.js")

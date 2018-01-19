@@ -33,10 +33,8 @@ $('#userTable tbody').on('click', 'tr', function () {
                   className: "btn btn-primary pull-left",
                   callback: function () {
                       //call user save changes post
-                      //delete user out of table by row
-
-
-                      //alert($('form #email').val());
+                      var url = "/EditUser/Index?alias=" + alias;
+                      window.location.href = url;
                       return true;
                   }
               },
@@ -45,7 +43,7 @@ $('#userTable tbody').on('click', 'tr', function () {
                   className: "btn btn-primary pull-left",
                   callback: function () {
                       $.ajax({
-                          url: "Home/enableUserFromName",
+                          url: "/Home/enableUserFromName",
                           type: "POST",
                           data: {
                               sAMAccountName: alias
@@ -68,7 +66,7 @@ $('#userTable tbody').on('click', 'tr', function () {
                   className: "btn btn-primary pull-left",
                   callback: function () {
                       $.ajax({
-                          url: "Home/resetPasswordFromName",
+                          url: "/Home/resetPasswordFromName",
                           type: "POST",
                           data: {
                               sAMAccountName: alias
@@ -90,7 +88,7 @@ $('#userTable tbody').on('click', 'tr', function () {
                   className: "btn btn-primary pull-left",
                   callback: function () {
                       $.ajax({
-                          url: "Home/unlockAccountFromName",
+                          url: "/Home/unlockAccountFromName",
                           type: "POST",
                           data: {
                               sAMAccountName: alias
@@ -128,8 +126,8 @@ $('#userTable tbody').on('click', 'tr', function () {
                   label: "Edit User",
                   className: "btn btn-primary pull-left",
                   callback: function () {
-                      //call user save changes post
-                      //delete user out of table by row
+                      var url = "/EditUser/Index?alias=" + alias;
+                      window.location.href = url;
                       return true;
                   }
               },
@@ -138,7 +136,7 @@ $('#userTable tbody').on('click', 'tr', function () {
                   className: "btn btn-primary pull-left",
                   callback: function () {
                       $.ajax({
-                          url: "Home/disableUserFromName",
+                          url: "/Home/disableUserFromName",
                           type: "POST",
                           data: {
                               sAMAccountName: alias
@@ -161,7 +159,7 @@ $('#userTable tbody').on('click', 'tr', function () {
                   className: "btn btn-primary pull-left",
                   callback: function () {
                       $.ajax({
-                          url: "Home/resetPasswordFromName",
+                          url: "/Home/resetPasswordFromName",
                           type: "POST",
                           data: {
                               sAMAccountName: alias
@@ -183,7 +181,7 @@ $('#userTable tbody').on('click', 'tr', function () {
                   className: "btn btn-primary pull-left",
                   callback: function () {
                       $.ajax({
-                          url: "Home/unlockAccountFromName",
+                          url: "/Home/unlockAccountFromName",
                           type: "POST",
                           data: {
                               sAMAccountName: alias

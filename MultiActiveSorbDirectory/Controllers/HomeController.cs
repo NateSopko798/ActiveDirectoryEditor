@@ -22,7 +22,7 @@ namespace MultiActiveSorbDirectory.Controllers
             DirectorySearcher searcher = new DirectorySearcher(de)
             {
                 PageSize = int.MaxValue,
-                Filter = "(&(objectCategory=person)(objectClass=user)(sAMAccountName="+user+"))"
+                Filter = "(&(objectCategory=person)(objectClass=user)(sAMAccountName=" + user + "))"
             };
 
             var result = searcher.FindOne();
@@ -87,14 +87,14 @@ namespace MultiActiveSorbDirectory.Controllers
                     JobTitle = result.Properties["title"][0].ToString();
                     //ViewBag.firstname = firstname;
                 }
-                string Department ="";
+                string Department = "";
 
                 if (result.Properties.Contains("department"))
                 {
                     surname = result.Properties["department"][0].ToString();
                     //ViewBag.lastname = surname;
                 }
-                
+
                 Account m = new Account();
                 m.displayName = displayName;
                 m.givenName = firstname;
@@ -359,40 +359,7 @@ namespace MultiActiveSorbDirectory.Controllers
             catch
             {
                 m.userPrincipalName = "";
-            } 
-            return m;
-        }
-
-        public Account buildUserBetter(SearchResult user)
-        {
-            Account m = new Account();
-            m.c = user.Properties["C"][0].ToString();
-            m.CN = user.Properties["CN"][0].ToString();
-            m.company = user.Properties["company"][0].ToString();
-            m.department = user.Properties["department"][0].ToString();
-            m.displayName = user.Properties["displayName"][0].ToString();
-            m.givenName = user.Properties["givenName"][0].ToString();
-            m.homephone = user.Properties["homephone"][0].ToString();
-            m.l = user.Properties["l"][0].ToString();
-            m.mail = user.Properties["mail"][0].ToString();
-            m.mailNickname = user.Properties["mailNickname"][0].ToString();
-            m.manager = user.Properties["manager"][0].ToString();
-            m.mobile = user.Properties["mobile"][0].ToString();
-            m.msExchHomeServerName = user.Properties["msExchHomeServerName"][0].ToString();
-            m.name = user.Properties["name"][0].ToString();
-            m.objectCategory = user.Properties["objectCategory"][0].ToString();
-            m.ObjectClass = user.Properties["ObjectClass"][0].ToString();
-            m.postalCode = user.Properties["postalCode"][0].ToString();
-            m.pwdLastSet = user.Properties["pwdLastSet"][0].ToString();
-            m.sAMAccountName = user.Properties["sAMAccountName"][0].ToString();
-            m.showInAddressBook = user.Properties["showInAddressBook"][0].ToString();
-            m.SN = user.Properties["SN"][0].ToString();
-            m.st = user.Properties["st"][0].ToString();
-            m.streetAddress = user.Properties["streetAddress"][0].ToString();
-            m.telephoneNumber = user.Properties["telephoneNumber"][0].ToString();
-            m.title = user.Properties["title"][0].ToString();
-            m.userAccountControl = user.Properties["userAccountControl"][0].ToString();
-            m.userPrincipalName = user.Properties["userPrincipalName"][0].ToString();
+            }
             return m;
         }
 
@@ -419,6 +386,13 @@ namespace MultiActiveSorbDirectory.Controllers
         public ActionResult Index()
         {
             return searchAllUsers(createDirectoryEntry());
+        }
+
+        //POST: Redirect to Edit
+        [HttpPost]
+        public ActionResult redirectToEdit(string alias)
+        {
+            return RedirectToAction("Index", "EditUser", new { alias =alias });
         }
 
         //POST: Reset Password Command AJAX

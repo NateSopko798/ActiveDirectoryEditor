@@ -72,6 +72,7 @@ $('#submitForm').click(function () {
                         }
                         else {
                             //then submit
+                            $("input[type=submit]").attr("disabled", "disabled");
                             document.getElementById("createUserForm").submit();
                         }
                     }

@@ -130,7 +130,7 @@ namespace MultiActiveSorbDirectory.Controllers
             // define vars for user  
 
             DirectoryEntry user = myLdapConnection.Children.Add(
-                                 "CN=" + m.givenName + " " + m.SN, "user");
+                                 "CN=" + m.SN + "\\, " + m.givenName + " " +m.initials+ ".", "user");
 
             // User name (domain based)   
             user.Properties["userprincipalname"].Add(m.sAMAccountName + "@multisorb.com");
@@ -141,6 +141,9 @@ namespace MultiActiveSorbDirectory.Controllers
             // Surname  
             user.Properties["sn"].Add(m.SN);
 
+            // Initials
+            user.Properties["initials"].Add(m.initials);
+
             // Forename  
             user.Properties["givenname"].Add(m.givenName);
 
@@ -149,6 +152,9 @@ namespace MultiActiveSorbDirectory.Controllers
 
             // E-mail  
             user.Properties["mail"].Add(m.mail + "@multisorb.com");
+
+            // E-mail  
+            user.Properties["mailNickName"].Add(m.mail);
 
             //Country
             user.Properties["c"].Add(m.c);
@@ -221,7 +227,36 @@ namespace MultiActiveSorbDirectory.Controllers
         // GET: CreateUser
         public ActionResult Index()
         {
-            return View();
+            return View();     
+        }
+
+        //POST: Check CN Usage AJAX
+        [HttpPost]
+        public JsonResult checkCN(String cn)
+        {
+            if (cn == "")
+            {
+                return Json(new { success = false, error = "CN cannot be blank" }, JsonRequestBehavior.AllowGet);
+            }
+            try
+            {
+                DirectoryEntry myLdapConnection = createDirectoryEntry();
+
+                DirectorySearcher search = new DirectorySearcher(myLdapConnection);
+                search.Filter = "(CN=" + cn + ")";
+                SearchResult result = search.FindOne();
+
+                if (result == null)
+                {
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+                else return Json(new { success = false, error = "Alias taken already" }, JsonRequestBehavior.AllowGet);
+            }
+
+            catch (Exception e)
+            {
+                return Json(new { success = false, error = "Show this to an IT person please: " + e.ToString() }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         //POST: Check Alias Usage AJAX
