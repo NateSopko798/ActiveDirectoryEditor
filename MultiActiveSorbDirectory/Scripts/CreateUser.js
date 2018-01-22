@@ -71,9 +71,7 @@ $('#submitForm').click(function () {
                             return;
                         }
                         else {
-                            //then submit
-                            $("input[type=submit]").attr("disabled", "disabled");
-                            document.getElementById("createUserForm").submit();
+                            bootbox.confirm("Are you sure you would like to create this new user?", function (result) { if (result) document.getElementById("createUserForm").submit(); });
                         }
                     }
                 });

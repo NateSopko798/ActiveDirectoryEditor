@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.DirectoryServices;
 using MultiActiveSorbDirectory.Models;
+using System.DirectoryServices.AccountManagement;
 
 namespace MultiActiveSorbDirectory.Controllers
 {
@@ -513,5 +514,24 @@ namespace MultiActiveSorbDirectory.Controllers
                 return Json(new { success = false, error = e.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        ////POST: Enable User Command AJAX
+        //[HttpPost]
+        //public JsonResult checkLockedOut(String sAMAccountName)
+        //{
+        //    // set up domain context
+        //    PrincipalContext ctx = new PrincipalContext(ContextType.Domain);
+
+        //    // find a user
+        //    UserPrincipal user = UserPrincipal.FindByIdentity(ctx, sAMAccountName);
+
+        //    if (user != null)
+        //    {
+        //        if (user.IsAccountLockedOut())
+        //        {
+                    
+        //        }
+        //    }
+        //}
     }
 }

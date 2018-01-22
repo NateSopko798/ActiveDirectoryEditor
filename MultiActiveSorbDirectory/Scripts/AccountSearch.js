@@ -22,7 +22,9 @@ $('#userTable tbody').on('click', 'tr', function () {
     var table = $(this).closest("table");
     var currentRow = $(this);
     alias = $(this).find("td:nth(3)").text();
-    $(".form-content").html("Please choose an action below for " + $(this).find("td:first").text() + "'s user account");
+    $(".form-content").html("<h2>" + $(this).find("td:first").text() + "</h2><p>First Name: " +
+        $(this).find("td:nth(1)").text() + "</p><p>Last Name: " + $(this).find("td:nth(2)").text() + "</p><p>Username: " + $(this).find("td:nth(3)").text() +
+        "</p><p>Job Title: " + $(this).find("td:nth(4)").text() + "</p><p>Department: " + $(this).find("td:nth(5)").text() + "</p>");
     if ($(this).find("td:nth(22)").text() === "Account Disabled") {
         var modal = bootbox.dialog({
             message: $(".form-content").html(),

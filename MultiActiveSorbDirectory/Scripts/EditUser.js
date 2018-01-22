@@ -74,6 +74,21 @@ $(document).ready(function () {
                 });
             }
         });
+        if ($('#firstNameDiv').val() === "") { $('#firstNameDiv').addClass("has-warning"); }
+        if ($('#initialsDiv').val() === "") { $('#initialsDiv').addClass("has-warning"); }
+        if ($('#lastNameDiv').val() === "") { $('#lastNameDiv').addClass("has-warning"); }
+        if ($('#mobilePhoneDiv').val() === "") {$('#mobilePhoneDiv').addClass("has-warning");}
+        if ($('#officeExtensionDiv').val() === "") { $('#officeExtensionDiv').addClass("has-warning"); }
+        if ($('#titleDiv').val() === "") { $('#titleDiv').addClass("has-warning"); }
+        if ($('#employeeIdDiv').val() === "") { $('#employeeIdDiv').addClass("has-warning"); }
+        if ($('#aliasDiv').val() === "") { $('#aliasDiv').addClass("has-warning"); }
+        if ($('#emailDiv').val() === "") { $('#emailDiv').addClass("has-warning"); }
+        if ($('#telephoneDiv').val() === "") { $('#telephoneDiv').addClass("has-warning"); }
+        if ($('#addressDiv').val() === "") { $('#addressDiv').addClass("has-warning"); }
+        if ($('#cityDiv').val() === "") { $('#cityDiv').addClass("has-warning"); }
+        if ($('#zipCodeDiv').val() === "") { $('#zipCodeDiv').hasClass("has-warning"); }
+        if ($('#manager').val() === "") { $('#manager').hasClass("has-warning"); }
+        if ($('#department').val() === "") { $('#department').hasClass("has-warning"); }
     }
 });
 
@@ -84,7 +99,27 @@ $('#submitForm').click(function () {
         alert("Please fix " + errors + " box before submitting new user");
         return;
     }
-    document.getElementById("editUserForm").submit();
+    var modal = bootbox.dialog({
+        message: "Are you sure you would like to save these changes to the current user?",
+        title: "Finalize changes to user",
+        buttons: [
+          {
+              label: "Edit User",
+              className: "btn btn-primary pull-left",
+              callback: function () {
+                  document.getElementById("editUserForm").submit();
+              }
+          },
+          {
+              label: "Close",
+              className: "btn btn-default pull-right"
+          }
+        ],
+        show: false,
+        onEscape: function () {
+            modal.modal("hide");
+        }
+    });
 });
 
 function hasErrors() {

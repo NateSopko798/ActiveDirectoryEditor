@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.DirectoryServices;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -224,6 +226,39 @@ namespace MultiActiveSorbDirectory.Controllers
             return "";
         }
 
+        private string createTicket(String displayName)
+        {
+            MailMessage msg = new MailMessage();
+            //msg.To.Add(new MailAddress("nsopko@multisorb.com"));
+            msg.To.Add(new MailAddress("help@multisorb.on.spiceworks.com"));
+            msg.From = new MailAddress("no-reply@multisorb.com");
+            msg.Subject = "New User Account Created";
+            //msg.Body = "Please finish setup for: " + displayName;
+            msg.Body = "A new employee user account has been created in Active Directory!\n Now please complete setup for: ";
+            //msg.IsBodyHtml = true;
+
+            SmtpClient client = new SmtpClient();
+            client.UseDefaultCredentials = false;
+            //client.Credentials = new System.Net.NetworkCredential("nsopko@multisorb.com", "MTISummer2017!");
+            client.Port = 25; // You can use Port 25 if 587 is blocked (mine is!)
+            //client.Host = "smtp.office365.com";
+            client.Host = "multisorb-com.mail.protection.outlook.com";
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.EnableSsl = true;
+            ServicePointManager
+    .ServerCertificateValidationCallback +=
+    (sender, cert, chain, sslPolicyErrors) => true;
+            try
+            {
+                client.Send(msg);
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
+            }
+        }
+
         // GET: CreateUser
         public ActionResult Index()
         {
@@ -332,7 +367,16 @@ namespace MultiActiveSorbDirectory.Controllers
                         returner = enableUserFromName(obj.sAMAccountName);
                         if (returner == "")
                         {
-                            return RedirectToAction("Index", "Home");
+                            returner = createTicket(obj.displayName); 
+                            if (returner =="")
+                            {
+                                return RedirectToAction("Index", "Home");
+                            }
+                            else
+                            {
+                                ViewBag.error = returner;
+                                return View();
+                            }
                         }
                         else
                         {
