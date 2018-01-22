@@ -13,44 +13,8 @@ function getUrlParameter(sParam) {
     }
 }
 
-//var _first = "";
-//var _initial = "";
-//var _last = "";
-//var _address = "";
-//var _city = "";
-//var _state = "";
-//var _zipCode = "";
-//var _country = "";
-//var _mobile = "";
-//var _office = "";
-//var _title = "";
-//var _department = "";
-//var _employeeId = "";
-//var _alias = "";
-var _manager = "";
-//var _email = "";
-//var _telephone = "";
-
 function populate(first, initial, last, address, city, st, zip, country, mobile, office, title, 
     department, employeeid, alias, email, telephone, supervisor) {
-    //_first = first;
-    //_initial = initial;
-    //_last = last;
-    //_address = address;
-    //_city = city;
-    //_st = st;
-    //_zip = zip;
-    //_country = country;
-    //_mobile = mobile;
-    //_office = office;
-    //_title = title;
-    //_department = department;
-    //_employeeid = employeeid;
-    //_alias = alias;
-    _manager = supervisor;
-    //_email = email;
-    //_telephone = telephone;
-
     $('#firstName').val(first);
     $('#initials').val(initial);
     $('#lastName').val(last);
@@ -102,7 +66,8 @@ $(document).ready(function () {
                             data: { manager: managerAlias },
                             dataType: 'json',
                             success: function (response) {
-                                $('#manager').val(response.displayName);
+                                console.log(response.sAMAccountName);
+                                $('#manager').val(response.sAMAccountName);
                             }
                         });
                     }

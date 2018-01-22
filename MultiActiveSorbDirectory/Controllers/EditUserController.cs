@@ -377,7 +377,7 @@ namespace MultiActiveSorbDirectory.Controllers
             {
                 return null;
             }
-            return result.Properties["displayName"][0].ToString();
+            return result.Properties["sAMAccountName"][0].ToString();
         }
 
         private bool checkErrors(Account m)
@@ -440,63 +440,50 @@ namespace MultiActiveSorbDirectory.Controllers
             
             DirectoryEntry user = searcher.FindOne().GetDirectoryEntry();
 
-            string newCN = "CN=" + m.SN + "\\, " + m.givenName + " " + m.initials + ".";
-            try
-            {
-                using (user)
-                {
-                    user.Rename(newCN);
-                }
-            }
-            catch (Exception e)
-            {
-                return e.ToString();
-            }
-
             // Surname  
-            user.Properties["sn"].Add(m.SN);
+            user.Properties["sn"].Value = m.SN;
 
             // Initials
-            user.Properties["initials"].Add(m.initials);
+            user.Properties["initials"].Value = m.initials;
 
             // Forename  
-            user.Properties["givenname"].Add(m.givenName);
+            user.Properties["givenname"].Value = m.givenName;
 
             // Display name
-            user.Properties["displayname"].Add(m.SN + ", " + m.givenName + " " + m.initials + ".");
+            user.Properties["displayname"].Value = (m.SN + ", " + m.givenName + " " + m.initials + ".");
 
             //Country
-            user.Properties["c"].Add(m.c);
+            user.Properties["c"].Value = (m.c);
 
             //title
-            user.Properties["title"].Add(m.title);
+            user.Properties["title"].Value = (m.title);
 
             //Department
-            user.Properties["department"].Add(m.department);
+            user.Properties["department"].Value = (m.department);
 
             //Telephone number
-            user.Properties["telephoneNumber"].Add(m.telephoneNumber);
+            user.Properties["telephoneNumber"].Value = (m.telephoneNumber);
 
             //Street
-            user.Properties["streetAddress"].Add(m.streetAddress);
+            user.Properties["streetAddress"].Value = (m.streetAddress);
 
             //City
-            user.Properties["l"].Add(m.l);
+            user.Properties["l"].Value = (m.l);
 
             //State
-            user.Properties["st"].Add(m.st);
+            user.Properties["st"].Value = (m.st);
 
             //Postal Code
-            user.Properties["postalCode"].Add(m.postalCode);
+            user.Properties["postalCode"].Value = (m.postalCode);
 
             //Office
-            user.Properties["physicalDeliveryOfficeName"].Add("Ext. " + m.physicalDeliveryOfficeName);
+            user.Properties["physicalDeliveryOfficeName"].Value = (m.physicalDeliveryOfficeName);
 
             //Mobile Phone
-            user.Properties["mobile"].Add(m.mobile);
+            user.Properties["mobile"].Value = (m.mobile);
 
             //EmployeeID //might be breaking
-            user.Properties["employeeID"].Add(m.employeeID);
+            user.Properties["employeeID"].Value = (m.employeeID);
 
             //Manager
             String managerDN = getDistinguishedName(m.manager, de);
@@ -506,13 +493,25 @@ namespace MultiActiveSorbDirectory.Controllers
             }
             else
             {
-                user.Properties["manager"].Add(managerDN);
+                user.Properties["manager"].Value = (managerDN);
             }
 
             //Apply changes to new user
             try
             {
                 user.CommitChanges();
+            }
+            catch (Exception e)
+            {
+                return e.ToString();
+            }
+            string newCN = "CN=" + m.SN + "\\, " + m.givenName + " " + m.initials + ".";
+            try
+            {
+                using (user)
+                {
+                    user.Rename(newCN);
+                }
             }
             catch (Exception e)
             {
@@ -526,7 +525,30 @@ namespace MultiActiveSorbDirectory.Controllers
         {
             return View();
         }
-        
+
+        //POST: Form Post Back
+        [HttpPost]
+        public ActionResult Index(Account obj)
+        {
+            if (checkErrors(obj))
+            {
+                return View();
+            }
+            else
+            {
+                var returner = editUserNow(obj);
+                if (returner == "")
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ViewBag.error = returner;
+                    return View();
+                }
+            }
+        }
+
         //POST: Fill Form
         [HttpPost]
         public String fillForm(string alias)
@@ -548,7 +570,7 @@ namespace MultiActiveSorbDirectory.Controllers
         {
             Account m = new Account();
             
-            m.displayName = manager;
+            m.sAMAccountName = manager;
 
             JavaScriptSerializer ser = new JavaScriptSerializer();
 
