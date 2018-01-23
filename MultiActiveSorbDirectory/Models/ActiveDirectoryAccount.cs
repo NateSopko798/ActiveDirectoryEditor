@@ -45,6 +45,11 @@ namespace MultiActiveSorbDirectory.Models
         public string sAMAccountName { get; set; }
     }
 
+    public class Department
+    {
+        public string departmentName { get; set; }
+    }
+
     public class ActiveDirectoryAccount
     {
         public List<Account> Accounts = new List<Account>();

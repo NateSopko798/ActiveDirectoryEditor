@@ -30,6 +30,16 @@ $(document).ready(function () {
             });
         }
     });
+    $.ajax({
+        url: "/CreateUser/populateDepartments",
+        type: "POST",
+        dataType: 'json',
+        success: function (response) {
+            $.each(response, function (i, item) {
+                $('#department').append($("<option />").val(item.departmentName).text(item.departmentName));
+            });
+        }
+    });
 });
 
 $('#submitForm').click(function () {

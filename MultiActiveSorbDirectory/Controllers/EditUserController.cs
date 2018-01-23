@@ -380,22 +380,22 @@ namespace MultiActiveSorbDirectory.Controllers
             return result.Properties["sAMAccountName"][0].ToString();
         }
 
-        private bool checkErrors(Account m)
-        {
-            if (m.c == null || m.department == null || m.employeeID == null ||
-                m.givenName == null || m.initials == null || m.l == null ||
-                m.mail == null || m.manager == null || m.mobile == null ||
-                m.postalCode == null || m.sAMAccountName == null || m.SN == null ||
-                m.st == null || m.streetAddress == null || m.telephoneNumber == null ||
-                m.title == null || m.physicalDeliveryOfficeName == null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        //private bool checkErrors(Account m)
+        //{
+        //    if (m.c == null || m.department == null || m.employeeID == null ||
+        //        m.givenName == null || m.initials == null || m.l == null ||
+        //        m.mail == null || m.manager == null || m.mobile == null ||
+        //        m.postalCode == null || m.sAMAccountName == null || m.SN == null ||
+        //        m.st == null || m.streetAddress == null || m.telephoneNumber == null ||
+        //        m.title == null || m.physicalDeliveryOfficeName == null)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
 
         private string getDistinguishedName(String user, DirectoryEntry de)
         {
@@ -477,7 +477,7 @@ namespace MultiActiveSorbDirectory.Controllers
             user.Properties["postalCode"].Value = (m.postalCode);
 
             //Office
-            user.Properties["physicalDeliveryOfficeName"].Value = (m.physicalDeliveryOfficeName);
+            user.Properties["physicalDeliveryOfficeName"].Value = ("Ext. " +m.physicalDeliveryOfficeName);
 
             //Mobile Phone
             user.Properties["mobile"].Value = (m.mobile);
@@ -530,23 +530,16 @@ namespace MultiActiveSorbDirectory.Controllers
         [HttpPost]
         public ActionResult Index(Account obj)
         {
-            if (checkErrors(obj))
+            var returner = editUserNow(obj);
+            if (returner == "")
             {
-                return View();
+                //return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Redirect", new { source = "edit" });
             }
             else
             {
-                var returner = editUserNow(obj);
-                if (returner == "")
-                {
-                    //return RedirectToAction("Index", "Home");
-                    return RedirectToAction("Index", "Redirect", new { source = "edit" });
-                }
-                else
-                {
-                    ViewBag.error = returner;
-                    return View();
-                }
+                ViewBag.error = returner;
+                return View();
             }
         }
 
@@ -572,6 +565,19 @@ namespace MultiActiveSorbDirectory.Controllers
             Account m = new Account();
             
             m.sAMAccountName = manager;
+
+            JavaScriptSerializer ser = new JavaScriptSerializer();
+
+            return ser.Serialize(m);
+        }
+
+        //POST: Fill Deparment
+        [HttpPost]
+        public String fillDepartment(string department)
+        {
+            Account m = new Account();
+
+            m.department = department;
 
             JavaScriptSerializer ser = new JavaScriptSerializer();
 
@@ -632,25 +638,52 @@ namespace MultiActiveSorbDirectory.Controllers
             }
         }
 
+        //POST: Check EmployeeID Usage AJAX
+        [HttpPost]
+        public JsonResult checkEmployeeID(String employeeID, String alias)
+        {
+            try
+            {
+                DirectoryEntry myLdapConnection = createDirectoryEntry();
+
+                DirectorySearcher search = new DirectorySearcher(myLdapConnection);
+                search.Filter = "(employeeID=" + employeeID + ")";
+                SearchResult result = search.FindOne();
+
+                if (result == null)
+                {
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    if(result.Properties["sAMAccountName"][0].ToString() == alias)
+                    {
+                        return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { success = false, error = "Employee ID taken already" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+
+            catch (Exception e)
+            {
+                return Json(new { success = false, error = "Show this to an IT person please: " + e.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         //POST: Form Post Back
         [HttpPost]
         public ActionResult editUser(Account obj)
         {
-            if (checkErrors(obj))
+            var returner = editUserNow(obj);
+            if (returner == "")
             {
-                ViewBag.error = "One of the account values were missing";
+                ViewBag.error = returner;
                 return View();
             }
-            else
-            {
-                var returner = editUserNow(obj);
-                if (returner == "")
-                {
-                    ViewBag.error = returner;
-                    return View();
-                }
-                return RedirectToAction("Index", "Home");
-            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -14,7 +14,7 @@ function getUrlParameter(sParam) {
 }
 
 function populate(first, initial, last, address, city, st, zip, country, mobile, office, title, 
-    department, employeeid, alias, email, telephone, supervisor) {
+    department, employeeid, alias, email, telephone, supervisor, mail) {
     $('#firstName').val(first);
     $('#initials').val(initial);
     $('#lastName').val(last);
@@ -24,18 +24,25 @@ function populate(first, initial, last, address, city, st, zip, country, mobile,
     $('#zipCode').val(zip);
     $('#country').val(country);
     $('#mobile').val(mobile);
-    $('#officeExtension').val(office);
+    //take off the ext. part of office
+    //$('#officeExtension').val(office);
+    $('#officeExtension').val(office.substring(5));
     $('#title').val(title);
     $('#department').val(department);
     $('#employeeId').val(employeeid);
     $('#alias').val(alias);
-    $('#email').val(email);
+    if (email == "") {
+        $('#email').val(mail.slice(0, -14));
+    } else {
+        $('#email').val(email);
+    }
     $('#telephone').val(telephone);
 }
 
 $(document).ready(function () {
     var user = getUrlParameter('alias');
     var managerAlias = "";
+    var department = "";
     if (user !== undefined) {
         $.ajax({
             url: "/EditUser/fillForm",
@@ -47,8 +54,9 @@ $(document).ready(function () {
                     , response.l, response.st, response.postalCode, response.c, response.mobile
                     , response.physicalDeliveryOfficeName, response.title, response.department
                     , response.employeeID, response.sAMAccountName, response.mailNickname
-                    , response.telephoneNumber, response.managerAlias);
+                    , response.telephoneNumber, response.managerAlias,response.mail);
                 managerAlias = response.managerAlias;
+                department = response.department;
                 $.ajax({
                     url: "/CreateUser/populateSupervisors",
                     type: "POST",
@@ -66,29 +74,48 @@ $(document).ready(function () {
                             data: { manager: managerAlias },
                             dataType: 'json',
                             success: function (response) {
-                                console.log(response.sAMAccountName);
                                 $('#manager').val(response.sAMAccountName);
+                            }
+                        });
+                    }
+                });
+                $.ajax({
+                    url: "/CreateUser/populateDepartments",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function (response) {
+                        $.each(response, function (i, item) {
+                            $('#department').append($("<option />").val(item.departmentName).text(item.departmentName));
+                        });
+                        $.ajax({
+                            url: "/EditUser/fillDepartment",
+                            type: "POST",
+                            data: { department: department },
+                            dataType: 'json',
+                            success: function (response) {
+                                $('#department').val(response.department);
                             }
                         });
                     }
                 });
             }
         });
-        if ($('#firstNameDiv').val() === "") { $('#firstNameDiv').addClass("has-warning"); }
-        if ($('#initialsDiv').val() === "") { $('#initialsDiv').addClass("has-warning"); }
-        if ($('#lastNameDiv').val() === "") { $('#lastNameDiv').addClass("has-warning"); }
-        if ($('#mobilePhoneDiv').val() === "") {$('#mobilePhoneDiv').addClass("has-warning");}
-        if ($('#officeExtensionDiv').val() === "") { $('#officeExtensionDiv').addClass("has-warning"); }
-        if ($('#titleDiv').val() === "") { $('#titleDiv').addClass("has-warning"); }
-        if ($('#employeeIdDiv').val() === "") { $('#employeeIdDiv').addClass("has-warning"); }
-        if ($('#aliasDiv').val() === "") { $('#aliasDiv').addClass("has-warning"); }
-        if ($('#emailDiv').val() === "") { $('#emailDiv').addClass("has-warning"); }
-        if ($('#telephoneDiv').val() === "") { $('#telephoneDiv').addClass("has-warning"); }
-        if ($('#addressDiv').val() === "") { $('#addressDiv').addClass("has-warning"); }
-        if ($('#cityDiv').val() === "") { $('#cityDiv').addClass("has-warning"); }
-        if ($('#zipCodeDiv').val() === "") { $('#zipCodeDiv').hasClass("has-warning"); }
-        if ($('#manager').val() === "") { $('#manager').hasClass("has-warning"); }
-        if ($('#department').val() === "") { $('#department').hasClass("has-warning"); }
+        //alert($('#initialsDiv').val());
+        //if ($('#firstNameDiv').val() === null) { $('#firstNameDiv').addClass("has-warning"); }
+        //if ($('#initialsDiv').val() === null) { $('#initialsDiv').addClass("has-warning"); }
+        //if ($('#lastNameDiv').val() === null) { $('#lastNameDiv').addClass("has-warning"); }
+        //if ($('#mobilePhoneDiv').val() === null) { $('#mobilePhoneDiv').addClass("has-warning"); }
+        //if ($('#officeExtensionDiv').val() === null) { $('#officeExtensionDiv').addClass("has-warning"); }
+        //if ($('#titleDiv').val() === null) { $('#titleDiv').addClass("has-warning"); }
+        //if ($('#employeeIdDiv').val() === null) { $('#employeeIdDiv').addClass("has-warning"); }
+        //if ($('#aliasDiv').val() === null) { $('#aliasDiv').addClass("has-warning"); }
+        //if ($('#emailDiv').val() === null) { $('#emailDiv').addClass("has-warning"); }
+        //if ($('#telephoneDiv').val() === null) { $('#telephoneDiv').addClass("has-warning"); }
+        //if ($('#addressDiv').val() === null) { $('#addressDiv').addClass("has-warning"); }
+        //if ($('#cityDiv').val() === null) { $('#cityDiv').addClass("has-warning"); }
+        //if ($('#zipCodeDiv').val() === null) { $('#zipCodeDiv').hasClass("has-warning"); }
+        //if ($('#manager').val() === null) { $('#manager').hasClass("has-warning"); }
+        //if ($('#department').val() === null) { $('#department').hasClass("has-warning"); }
     }
 });
 
@@ -99,24 +126,32 @@ $('#submitForm').click(function () {
         alert("Please fix " + errors + " box before submitting new user");
         return;
     }
-    $.ajax({
-        url: "/CreateUser/checkEmployeeID",
-        type: "POST",
-        data: {
-            employeeID: employeeID
-        },
-        dataType: 'json',
-        success: function (response) {
-            if (response.success === false) {
-                alert("Error: " + response.error);
-                $('#employeeIdDiv').addClass("has-error");
-                return;
+    var employeeID = $('#employeeId').val();
+    var alias = $('#alias').val();
+    if (employeeID === "") {
+        bootbox.confirm("Are you sure you would like to save changes to this user?", function (result) { if (result) document.getElementById("editUserForm").submit(); });
+    }
+    else {
+        $.ajax({
+            url: "/EditUser/checkEmployeeID",
+            type: "POST",
+            data: {
+                employeeID: employeeID,
+                alias: alias
+            },
+            dataType: 'json',
+            success: function (response) {
+                if (response.success === false) {
+                    alert("Error: " + response.error);
+                    $('#employeeIdDiv').addClass("has-error");
+                    return;
+                }
+                else {
+                    bootbox.confirm("Are you sure you would like to save changes to this user?", function (result) { if (result) document.getElementById("editUserForm").submit(); });
+                }
             }
-            else {
-                bootbox.confirm("Are you sure you would like to save changes to this user?", function (result) { if (result) document.getElementById("editUserForm").submit(); });
-            }
-        }
-    });
+        });
+    }
 });
 
 function hasErrors() {
@@ -150,8 +185,6 @@ $('#firstName').keyup(function () {
         $('#firstNameDiv').removeClass("has-warning");
         firstNameLetter = word[0].toLowerCase();
         firstName = word;
-        updateAlias();
-        updateEmail();
     }
 });
 $('#initials').keyup(function () {
@@ -172,8 +205,6 @@ $('#initials').keyup(function () {
         $('#initialsDiv').removeClass("has-error");
         $('#initialsDiv').removeClass("has-warning");
     }
-    updateAlias();
-    updateEmail();
 });
 $('#lastName').keyup(function () {
     var word = $('#lastName').val();
@@ -188,8 +219,6 @@ $('#lastName').keyup(function () {
         lastNameLetter = word[0].toLowerCase();
         lastName = word;
     }
-    updateAlias();
-    updateEmail();
 });
 $('#zipCode').keyup(function () {
     var word = $('#zipCode').val();

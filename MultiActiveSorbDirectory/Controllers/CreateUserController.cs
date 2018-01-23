@@ -228,8 +228,6 @@ namespace MultiActiveSorbDirectory.Controllers
 
         private string createTicket(String displayName)
         {
-            return "";
-            /*
             MailMessage msg = new MailMessage();
             //msg.To.Add(new MailAddress("nsopko@multisorb.com"));
             //msg.To.Add(new MailAddress("help@multisorb.on.spiceworks.com"));
@@ -257,7 +255,7 @@ namespace MultiActiveSorbDirectory.Controllers
             catch (Exception ex)
             {
                 return ex.ToString();
-            }*/
+            }
         }
 
         // GET: CreateUser
@@ -434,9 +432,6 @@ namespace MultiActiveSorbDirectory.Controllers
 
             DirectoryEntry de = createDirectoryEntry();
 
-            ActiveDirectoryAccount viewModel = new ActiveDirectoryAccount();
-            List<Account> allUsersView = new List<Account>();
-
             DirectorySearcher userSearcher = new DirectorySearcher(de);
             userSearcher.SearchScope = SearchScope.OneLevel;
             userSearcher.Filter = "(&(objectCategory=person)(objectClass=user))";
@@ -449,6 +444,44 @@ namespace MultiActiveSorbDirectory.Controllers
             }
             JavaScriptSerializer ser = new JavaScriptSerializer();
             return ser.Serialize(people);
+        }
+
+        //POST: Get Department Drop Down
+        [HttpPost]
+        public string populateDepartments()
+        {
+            List<Department> departmentsStrong = new List<Department>();
+            List<String> departments = new List<String>();
+
+            DirectoryEntry de = createDirectoryEntry();
+
+            DirectorySearcher userSearcher = new DirectorySearcher(de);
+            userSearcher.SearchScope = SearchScope.OneLevel;
+            userSearcher.Filter = "(&(objectCategory=person)(objectClass=user))";
+            foreach (SearchResult user in userSearcher.FindAll())
+            {
+                string check = "";
+                try
+                {
+                    check = user.Properties["department"][0].ToString();
+                }
+                catch(Exception e)
+                {
+                    string test = e.ToString(); // for debugging purposes
+                }
+                var match = departments
+                    .FirstOrDefault(stringToCheck => stringToCheck.Contains(check));
+                if (match == null)
+                    departments.Add(check);
+            }
+            foreach (var department in departments)
+            {
+                Department d = new Department();
+                d.departmentName = department;
+                departmentsStrong.Add(d);
+            }
+            JavaScriptSerializer ser = new JavaScriptSerializer();
+            return ser.Serialize(departmentsStrong);
         }
     }
 }
