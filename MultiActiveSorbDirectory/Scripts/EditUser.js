@@ -31,7 +31,7 @@ function populate(first, initial, last, address, city, st, zip, country, mobile,
     $('#department').val(department);
     $('#employeeId').val(employeeid);
     $('#alias').val(alias);
-    if (email == "") {
+    if (email === "") {
         $('#email').val(mail.slice(0, -14));
     } else {
         $('#email').val(email);
