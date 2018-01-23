@@ -228,26 +228,27 @@ namespace MultiActiveSorbDirectory.Controllers
 
         private string createTicket(String displayName)
         {
+            return "";
+            /*
             MailMessage msg = new MailMessage();
             //msg.To.Add(new MailAddress("nsopko@multisorb.com"));
-            msg.To.Add(new MailAddress("help@multisorb.on.spiceworks.com"));
-            msg.From = new MailAddress("no-reply@multisorb.com");
+            //msg.To.Add(new MailAddress("help@multisorb.on.spiceworks.com"));
+            msg.To.Add(new MailAddress("natesopko@gmail.com"));
+            //its going here because I am forwarding it to help@multisorb.on.spiceworks.com
+            //from gmail since sending it there directly didn't create a ticket
+            msg.From = new MailAddress("no-reply-sw@multisorb.com");
             msg.Subject = "New User Account Created";
-            //msg.Body = "Please finish setup for: " + displayName;
-            msg.Body = "A new employee user account has been created in Active Directory!\n Now please complete setup for: ";
-            //msg.IsBodyHtml = true;
-
+            msg.Body = "A new employee user account has been created in Active Directory.\n\nNow please complete setup for: "+displayName+"\n\nThank you!";
+            
             SmtpClient client = new SmtpClient();
             client.UseDefaultCredentials = false;
-            //client.Credentials = new System.Net.NetworkCredential("nsopko@multisorb.com", "MTISummer2017!");
-            client.Port = 25; // You can use Port 25 if 587 is blocked (mine is!)
-            //client.Host = "smtp.office365.com";
+            client.Port = 25;
             client.Host = "multisorb-com.mail.protection.outlook.com";
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.EnableSsl = true;
             ServicePointManager
-    .ServerCertificateValidationCallback +=
-    (sender, cert, chain, sslPolicyErrors) => true;
+                .ServerCertificateValidationCallback +=
+                (sender, cert, chain, sslPolicyErrors) => true;
             try
             {
                 client.Send(msg);
@@ -256,7 +257,7 @@ namespace MultiActiveSorbDirectory.Controllers
             catch (Exception ex)
             {
                 return ex.ToString();
-            }
+            }*/
         }
 
         // GET: CreateUser
@@ -348,6 +349,31 @@ namespace MultiActiveSorbDirectory.Controllers
             }
         }
 
+        //POST: Check EmployeeID Usage AJAX
+        [HttpPost]
+        public JsonResult checkEmployeeID(String employeeID)
+        {
+            try
+            {
+                DirectoryEntry myLdapConnection = createDirectoryEntry();
+
+                DirectorySearcher search = new DirectorySearcher(myLdapConnection);
+                search.Filter = "(employeeID=" + employeeID+ ")";
+                SearchResult result = search.FindOne();
+
+                if (result == null)
+                {
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+                else return Json(new { success = false, error = "Employee ID taken already" }, JsonRequestBehavior.AllowGet);
+            }
+
+            catch (Exception e)
+            {
+                return Json(new { success = false, error = "Show this to an IT person please: " + e.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         //POST: Form Post Back
         [HttpPost]
         public ActionResult Index(Account obj)
@@ -367,7 +393,8 @@ namespace MultiActiveSorbDirectory.Controllers
                         returner = enableUserFromName(obj.sAMAccountName);
                         if (returner == "")
                         {
-                            returner = createTicket(obj.displayName); 
+                            string displayName = obj.SN + ", " + obj.givenName + " " + obj.initials + ".";
+                            returner = createTicket(displayName); 
                             if (returner =="")
                             {
                                 return RedirectToAction("Index", "Home");

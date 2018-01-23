@@ -99,25 +99,22 @@ $('#submitForm').click(function () {
         alert("Please fix " + errors + " box before submitting new user");
         return;
     }
-    var modal = bootbox.dialog({
-        message: "Are you sure you would like to save these changes to the current user?",
-        title: "Finalize changes to user",
-        buttons: [
-          {
-              label: "Edit User",
-              className: "btn btn-primary pull-left",
-              callback: function () {
-                  document.getElementById("editUserForm").submit();
-              }
-          },
-          {
-              label: "Close",
-              className: "btn btn-default pull-right"
-          }
-        ],
-        show: false,
-        onEscape: function () {
-            modal.modal("hide");
+    $.ajax({
+        url: "/CreateUser/checkEmployeeID",
+        type: "POST",
+        data: {
+            employeeID: employeeID
+        },
+        dataType: 'json',
+        success: function (response) {
+            if (response.success === false) {
+                alert("Error: " + response.error);
+                $('#employeeIdDiv').addClass("has-error");
+                return;
+            }
+            else {
+                bootbox.confirm("Are you sure you would like to save changes to this user?", function (result) { if (result) document.getElementById("editUserForm").submit(); });
+            }
         }
     });
 });

@@ -42,6 +42,7 @@ $('#submitForm').click(function () {
     //check alias
     var alias = $('#alias').val();
     var email = $('#email').val() + "@multisorb.com";
+    var employeeID = $('#employeeId').val();
     $.ajax({
         url: "/CreateUser/checkAlias",
         type: "POST",
@@ -71,7 +72,24 @@ $('#submitForm').click(function () {
                             return;
                         }
                         else {
-                            bootbox.confirm("Are you sure you would like to create this new user?", function (result) { if (result) document.getElementById("createUserForm").submit(); });
+                            $.ajax({
+                                url: "/CreateUser/checkEmployeeID",
+                                type: "POST",
+                                data: {
+                                    employeeID: employeeID
+                                },
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response.success === false) {
+                                        alert("Error: " + response.error);
+                                        $('#employeeIdDiv').addClass("has-error");
+                                        return;
+                                    }
+                                    else {
+                                        bootbox.confirm("Are you sure you would like to create this new user?", function (result) { if (result) document.getElementById("createUserForm").submit(); });
+                                    }
+                                }
+                            });
                         }
                     }
                 });
