@@ -539,7 +539,8 @@ namespace MultiActiveSorbDirectory.Controllers
                 var returner = editUserNow(obj);
                 if (returner == "")
                 {
-                    return RedirectToAction("Index", "Home");
+                    //return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Redirect", new { source = "edit" });
                 }
                 else
                 {

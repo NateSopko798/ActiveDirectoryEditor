@@ -397,7 +397,8 @@ namespace MultiActiveSorbDirectory.Controllers
                             returner = createTicket(displayName); 
                             if (returner =="")
                             {
-                                return RedirectToAction("Index", "Home");
+                                //return RedirectToAction("Index", "Home");
+                                return RedirectToAction("Index", "Redirect",new {source = "create"});
                             }
                             else
                             {

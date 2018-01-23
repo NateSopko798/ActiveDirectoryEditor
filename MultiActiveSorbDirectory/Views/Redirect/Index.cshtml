@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Redirector";
+}
+@if (ViewBag.source == "create")
+{
+    <h2 style="text-align:center;">Thank you for creating a new user!</h2>
+}
+else
+{
+    <h2 style="text-align:center;">Thank you for making changes to a user!</h2>
+}
+
+<p style="text-align:center;">You are currently being redirected to the home page.</p>
+
+<address>
+    <strong>Support:</strong>   <a href="mailto:help@multisorb.on.spiceworks.com">IT Help Desk Email</a><br />
+</address>
+
+@Scripts.Render("~/Scripts/Redirector.js")
