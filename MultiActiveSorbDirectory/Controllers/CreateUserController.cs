@@ -16,7 +16,7 @@ namespace MultiActiveSorbDirectory.Controllers
         static DirectoryEntry createDirectoryEntry()
         {
             //Create directory connection with credentials
-            DirectoryEntry directoryEntry = new DirectoryEntry("LDAP://OU=Users,OU=Harlem Road,DC=multisorb,DC=com", "Administrator", "325H@l3m!");
+            DirectoryEntry directoryEntry = new DirectoryEntry("LDAP://OU=Users,OU=subgroupname,DC=contoso,DC=com", "username", "password");
             return directoryEntry;
         }
 
@@ -100,7 +100,7 @@ namespace MultiActiveSorbDirectory.Controllers
         {
             try
             {
-                DirectoryEntry myLdapConnection = new DirectoryEntry("LDAP://OU=Users,OU=Harlem Road,DC=multisorb,DC=com", "Administrator", "325H@l3m!");
+                DirectoryEntry myLdapConnection = new DirectoryEntry("LDAP://OU=Users,OU=subgroupname,DC=contoso,DC=com", "username", "password");
 
                 DirectorySearcher search = new DirectorySearcher(myLdapConnection);
                 search.Filter = "(sAMAccountName=" + sAMAccountName + ")";
