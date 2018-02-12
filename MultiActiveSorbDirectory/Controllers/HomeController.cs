@@ -14,7 +14,7 @@ namespace MultiActiveSorbDirectory.Controllers
         static DirectoryEntry createDirectoryEntry()
         {
             //Create directory connection
-            DirectoryEntry directoryEntry = new DirectoryEntry("LDAP://OU=Users,OU=Harlem Road,DC=multisorb,DC=com", "Administrator", "325H@l3m!");
+            DirectoryEntry directoryEntry = new DirectoryEntry("LDAP://OU=Users,OU=subgroupname,DC=contoso,DC=com", "username", "password");
             return directoryEntry;
         }
 
