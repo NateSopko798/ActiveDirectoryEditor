@@ -315,37 +315,6 @@ namespace MultiActiveSorbDirectory.Controllers
             }
         }
 
-        //private string getDisplayName(String user)
-        //{
-        //    DirectorySearcher searcher = new DirectorySearcher(createDirectoryEntry())
-        //    {
-        //        PageSize = int.MaxValue,
-        //        Filter = "(&(objectCategory=person)(objectClass=user)(sAMAccountName=" + user + "))"
-        //    };
-
-        //    var result = searcher.FindOne();
-
-        //    if (result == null)
-        //    {
-        //        return "";
-        //    }
-        //    try
-        //    {
-        //        string displayName = "";
-
-        //        if (result.Properties.Contains("distinguishedName"))
-        //        {
-        //            DN = result.Properties["distinguishedName"][0].ToString();
-        //        }
-        //        return DN;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine(e.ToString());
-        //        return "";
-        //    }
-        //}
-
         private Account searchByUserName(String user, DirectoryEntry de)
         {
             DirectorySearcher searcher = new DirectorySearcher(de)
@@ -379,24 +348,7 @@ namespace MultiActiveSorbDirectory.Controllers
             }
             return result.Properties["sAMAccountName"][0].ToString();
         }
-
-        //private bool checkErrors(Account m)
-        //{
-        //    if (m.c == null || m.department == null || m.employeeID == null ||
-        //        m.givenName == null || m.initials == null || m.l == null ||
-        //        m.mail == null || m.manager == null || m.mobile == null ||
-        //        m.postalCode == null || m.sAMAccountName == null || m.SN == null ||
-        //        m.st == null || m.streetAddress == null || m.telephoneNumber == null ||
-        //        m.title == null || m.physicalDeliveryOfficeName == null)
-        //    {
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
-
+        
         private string getDistinguishedName(String user, DirectoryEntry de)
         {
             DirectorySearcher searcher = new DirectorySearcher(de)
