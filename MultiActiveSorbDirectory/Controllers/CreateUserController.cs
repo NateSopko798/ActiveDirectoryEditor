@@ -80,7 +80,7 @@ namespace MultiActiveSorbDirectory.Controllers
                 if (result != null)
                 {
                     DirectoryEntry entryToUpdate = result.GetDirectoryEntry();
-                    entryToUpdate.Invoke("SetPassword", new object[] { "Mti@325" });
+                    entryToUpdate.Invoke("SetPassword", new object[] { "yourdefaultpasswordhere" });
                     entryToUpdate.Properties["LockOutTime"].Value = 0;
                     entryToUpdate.Properties["pwdLastSet"].Value = 0;
                     entryToUpdate.CommitChanges();
@@ -153,7 +153,7 @@ namespace MultiActiveSorbDirectory.Controllers
             user.Properties["displayname"].Add(m.SN + ", " + m.givenName + " " + m.initials + ".");
 
             // E-mail  
-            user.Properties["mail"].Add(m.mail + "@multisorb.com");
+            user.Properties["mail"].Add(m.mail + "@contoso.com");
 
             // E-mail  
             user.Properties["mailNickName"].Add(m.mail);
@@ -189,10 +189,10 @@ namespace MultiActiveSorbDirectory.Controllers
             user.Properties["mobile"].Add(m.mobile);
 
             //Company
-            user.Properties["company"].Add("Multisorb");
+            user.Properties["company"].Add("YourCompanyName");
 
             //Logon Script //might be breaking
-            user.Properties["scriptPath"].Add("login.vbs");
+            user.Properties["scriptPath"].Add("YourLoginScriptFileName");
 
             //EmployeeID //might be breaking
             user.Properties["employeeID"].Add(m.employeeID);
@@ -229,12 +229,10 @@ namespace MultiActiveSorbDirectory.Controllers
         private string createTicket(String displayName)
         {
             MailMessage msg = new MailMessage();
-            //msg.To.Add(new MailAddress("nsopko@multisorb.com"));
-            //msg.To.Add(new MailAddress("help@multisorb.on.spiceworks.com"));
-            msg.To.Add(new MailAddress("natesopko@gmail.com"));
+            msg.To.Add(new MailAddress("YourForwardingEmailAddressHere"));
             //its going here because I am forwarding it to help@multisorb.on.spiceworks.com
             //from gmail since sending it there directly didn't create a ticket
-            msg.From = new MailAddress("no-reply-sw@multisorb.com");
+            msg.From = new MailAddress("no-reply-sw@contoso.com");
             msg.Subject = "New User Account Created";
             msg.Body = "A new employee user account has been created in Active Directory.\n\nNow please complete setup for: "+displayName+"\n\nThank you!";
             
