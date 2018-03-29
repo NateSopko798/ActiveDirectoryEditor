@@ -38,18 +38,7 @@ namespace MultiActiveSorbDirectory.Controllers
 
             try
             {
-                //foreach (string propName in result.Properties.PropertyNames)
-                //{
-                //    ResultPropertyValueCollection valueCollection =
-                //    result.Properties[propName];
-                //    foreach (Object propertyValue in valueCollection)
-                //    {
-
-                //        //propList.Add(propName);
-                //        //valList.Add(propertyValue.ToString());
-                //    }
-                //}
-
+               
                 string displayName = "";
 
                 if (result.Properties.Contains("displayName"))
@@ -110,9 +99,6 @@ namespace MultiActiveSorbDirectory.Controllers
             {
                 Console.WriteLine("Exception caught:\n\n" + e.ToString());
             }
-
-            //ViewBag.propList = propList;
-            //ViewBag.valList = valList;
             viewModel.Accounts = allUsersView;
             return View(viewModel);
         }
@@ -375,10 +361,8 @@ namespace MultiActiveSorbDirectory.Controllers
 
             foreach (SearchResult user in userSearcher.FindAll())
             {
-                //userList.Add(user.Properties["givenName"][0].ToString());
                 allUsersView.Add(buildUser(user));
             }
-            //ViewBag.userList = userList;
             viewModel.Accounts = allUsersView;
             return View(viewModel);
         }
@@ -411,7 +395,7 @@ namespace MultiActiveSorbDirectory.Controllers
                 if (result != null)
                 {
                     DirectoryEntry entryToUpdate = result.GetDirectoryEntry();
-                    entryToUpdate.Invoke("SetPassword", new object[] {"Mti@325"});
+                    entryToUpdate.Invoke("SetPassword", new object[] {"YourDefaultPasswordHere"});
                     entryToUpdate.Properties["LockOutTime"].Value = 0; // unlock account
                     entryToUpdate.Properties["pwdLastSet"].Value = 0;
                     //entryToUpdate.Properties["PasswordExpired"].Value = 1;
@@ -514,24 +498,5 @@ namespace MultiActiveSorbDirectory.Controllers
                 return Json(new { success = false, error = e.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
-
-        ////POST: Enable User Command AJAX
-        //[HttpPost]
-        //public JsonResult checkLockedOut(String sAMAccountName)
-        //{
-        //    // set up domain context
-        //    PrincipalContext ctx = new PrincipalContext(ContextType.Domain);
-
-        //    // find a user
-        //    UserPrincipal user = UserPrincipal.FindByIdentity(ctx, sAMAccountName);
-
-        //    if (user != null)
-        //    {
-        //        if (user.IsAccountLockedOut())
-        //        {
-                    
-        //        }
-        //    }
-        //}
     }
 }
